@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { lightTheme, darkTheme } from '../utils/theme';
+import { lightTheme, darkTheme } from '../styles/theme';
 import { Appearance, useColorScheme } from 'react-native';
 
 
