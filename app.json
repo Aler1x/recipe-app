@@ -6,10 +6,24 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/TurbotaBook.ttf",
+            "./assets/fonts/TurbotaBoldItalic.ttf",
+            "./assets/fonts/TurbotaBold.ttf",
+            "./assets/fonts/TurbotaBookItalic.ttf",
+            "./assets/fonts/TurbotaHeavy.ttf"
+          ]
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#507D94"
     },
     "assetBundlePatterns": [
       "**/*"
