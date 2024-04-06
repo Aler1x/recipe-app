@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.cardBg }]}>
-      <Text style={{color: theme.text}}>Hello world!</Text>
+      <Text style={{ fontFamily: 'TurbotaBold', color: theme.text}}>Hello world!</Text>
       <Text style={{color: theme.bgCircle}}>Circle color!</Text>
       <PrimaryButton title="Toggle Theme" onPress={toggleTheme} />
     </View>

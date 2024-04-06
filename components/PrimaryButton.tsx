@@ -25,7 +25,7 @@ const PrimaryButton: React.FC<OwnProps> = ({ title, onPress, buttonStyle, textSt
       fontFamily: 'TurbotaBold',
       color: theme.fgText,
       fontSize: 16,
-      fontWeight: 'bold',
+      // fontWeight: 'bold', // when using custom font this will break the font
     },
   });
 

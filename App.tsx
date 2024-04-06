@@ -1,11 +1,6 @@
 import ThemeProvider from './store/themeContext';
 import Home from './screens/Home';
 import { useFonts } from 'expo-font';
-// import { useFonts } from 'expo-font';
-// import { useCallback, useEffect } from 'react';
-import * as SplashScreen from 'expo-splash-screen';
-import { useCallback } from 'react';
-// import { View } from 'react-native';
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -16,30 +11,21 @@ export default function App() {
     'TurbotaHeavy': require('./assets/fonts/TurbotaHeavy.ttf'),
   });
 
-  
-  // const onLayoutRootView = useCallback(async () => {
-  //   console.log('onLayoutRootView', fontsLoaded, fontError);
-  //   if (fontsLoaded || fontError) {
-  //     console.log('Hiding splash screen');
-  //     await SplashScreen.hideAsync();
-  //   }
-  // }, [fontsLoaded, fontError]);
-
-  // if (!fontsLoaded && !fontError) {
-  //   return null;
-  // }
-
-  if (!fontsLoaded && !fontError) {
+  if (!fontsLoaded) {
+    console.log('Loading fonts...');
     return null;
   }
+
+  console.log('Fonts loaded!');
 
   if (fontError) {
-    console.error('Failed to load fonts:', fontError);
-    return null;
+    console.log('Error loading fonts: ', fontError);
   }
 
+  console.log('No font errors!');
+
   return (
-    <ThemeProvider >
+    <ThemeProvider>
       <Home />
     </ThemeProvider>
   );
