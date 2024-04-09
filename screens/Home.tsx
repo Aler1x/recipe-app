@@ -1,15 +1,17 @@
 import React from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from '../store/themeContext';
+import PrimaryButton from '../components/PrimaryButton';
+import Text from '../components/Text';
 
 const Home = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.cardBg }]}>
-      <Text style={{color: theme.text}}>Hello world!</Text>
+      <Text>Hello world!</Text>
       <Text style={{color: theme.bgCircle}}>Circle color!</Text>
-      <Button title="Toggle Theme" onPress={toggleTheme} />
+      <PrimaryButton title="Toggle Theme" onPress={toggleTheme} />
     </View>
   )
 }

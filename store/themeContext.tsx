@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { lightTheme, darkTheme } from '../utils/theme';
-import { Appearance, useColorScheme } from 'react-native';
+import { lightTheme, darkTheme } from '../styles/theme';
+import { useColorScheme } from 'react-native';
 
 
 const ThemeContext = React.createContext({
