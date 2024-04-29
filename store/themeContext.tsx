@@ -1,7 +1,6 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { lightTheme, darkTheme } from '../utils/theme';
-import { Appearance, useColorScheme } from 'react-native';
-
+import React, { ReactNode, useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { lightTheme, darkTheme } from '../styles/theme';
+import { useColorScheme } from 'react-native';
 
 const ThemeContext = React.createContext({
   isDark: false,
@@ -19,7 +18,7 @@ export const useTheme = () => {
   return context;
 };
 
-const CustomThemeProvider = ({ children }: { children: ReactNode}) => {
+const ThemeProvider = ({ children }: { children: ReactNode}) => {
   const colorScheme = useColorScheme();
   const [isDark, setIsDark] = useState(colorScheme === 'dark');
   const [theme, setTheme] = useState(isDark ? darkTheme : lightTheme);
@@ -46,8 +45,5 @@ const CustomThemeProvider = ({ children }: { children: ReactNode}) => {
   );
 };
 
-const ThemeProvider = ({ children }: { children: ReactNode}) => (
-  <CustomThemeProvider>{children}</CustomThemeProvider>
-);
 
 export default ThemeProvider;

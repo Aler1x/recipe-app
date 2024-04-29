@@ -31,7 +31,7 @@ Now you can use the QR code to run the app on your phone or use the emulator.
 We use the following branches name format:
 
 ```bash
-feature/your-feature    --> for new features
+feat/your-feature    --> for new features
 fix/your-fix            --> for bug fixes
 refactor/your-refactor  --> for refactoring
 docs/your-docs          --> for documentation
