@@ -1,4 +1,3 @@
-import React from "react";
 import { Text as NativeText, TextStyle } from "react-native";
 import { useTheme } from "../store/themeContext";
 
@@ -17,6 +16,7 @@ const Text = ({ children, style, onForeground }: OwnProps) => {
         {
           color: onForeground ? theme.fgText : theme.text,
           fontFamily: "TurbotaBook",
+          letterSpacing: 0.3,
         },
         style,
       ]}

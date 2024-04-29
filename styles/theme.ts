@@ -17,6 +17,17 @@ type Theme = {
   stepDone: string;
   stepUndone: string;
   searchBarBg: string;
+  /**
+   * Shadows
+   */
+  generalShadow: string;
+  categoryCardShadow: string;
+};
+
+const commonTheme = {
+  searchBarBg: '#F3F3F3',
+  generalShadow: 'rgba(0, 0, 0, 15)',
+  categoryCardShadow: 'rgba(0, 0, 0, 0.55)',
 };
 
 export const lightTheme: Theme = {
@@ -31,7 +42,7 @@ export const lightTheme: Theme = {
   stepDone: '#3D974B',
   stepUndone: '#D5D5D5',
 
-  searchBarBg: '#F3F3F3',
+  ...commonTheme,
 };
 
 export const darkTheme: Theme = {
@@ -46,6 +57,5 @@ export const darkTheme: Theme = {
   stepDone: '#3D974B',
   stepUndone: '#6B6B6B',
 
-
-  searchBarBg: '#F3F3F3',
+  ...commonTheme,
 };
