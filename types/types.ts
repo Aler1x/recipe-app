@@ -14,7 +14,7 @@ export type Recipe = {
 export type Category = {
   id: number;
   name: string;
-  categoryImage?: string;
+  image?: string;
   categoryType?: CategoryType;
 }
 

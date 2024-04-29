@@ -5,10 +5,10 @@ import Text from "../Text";
 type CategoryProps = {
   id: number;
   name: string;
-  categoryImage?: string;
+  image?: string;
 }
 
-const Category = ({ id, name, categoryImage }: CategoryProps) => {
+const Category = ({ id, name, image }: CategoryProps) => {
   const { width } = Dimensions.get('window');
 
   const styles = StyleSheet.create({
@@ -45,7 +45,7 @@ const Category = ({ id, name, categoryImage }: CategoryProps) => {
 
   return (
     <ImageBackground
-      source={{ uri: categoryImage }}
+      source={{ uri: image }}
       style={styles.image}
     >
       <LinearGradient

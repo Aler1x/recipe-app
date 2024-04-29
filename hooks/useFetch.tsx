@@ -1,24 +1,9 @@
 import { useState, useEffect } from 'react';
 import { APP_URL } from '../constants';
-import App from '../App';
-
-async function fetchData(url: string): Promise<any> {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error:', error);
-    throw error;
-  }
-}
 
 // A custom hook that can fetch any data given a URL and returns typed data
-function useFetchData<T>(
-  endpoint: string,
-  paginated?: boolean,
+function useFetch<T>(
+  endpoint: string 
 ): { data: T | null; loading: boolean; error: Error | null } {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -27,9 +12,15 @@ function useFetchData<T>(
   useEffect(() => {
     setLoading(true);
     console.log(APP_URL + endpoint);
-    fetchData(APP_URL + endpoint)
+    fetch(`${APP_URL}${endpoint}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then(responseData => {
-        paginated ? setData(responseData.content) : setData(responseData);
+        setData(responseData);
         setError(null);
       })
       .catch(fetchError => {
@@ -44,4 +35,4 @@ function useFetchData<T>(
   return { data, loading, error };
 }
 
-export default useFetchData;
+export default useFetch;

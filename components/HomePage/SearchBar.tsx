@@ -1,21 +1,26 @@
 import {
   ActivityIndicator,
   ScrollView,
+  StyleProp,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import { FilterIcon, SearchIcon } from '../../assets/Icons';
 import { useTheme } from '../../store/themeContext';
 import Text from '../Text';
-import { mockup_categories, mockup_name_categories } from '../../store/mockup';
 import Category from './Category';
 import { useState } from 'react';
-import useFetchData from '../../hooks/useFetchData';
+import useFetch from '../../hooks/useFetch';
 import { Category as CategoryType } from '../../types/types';
 
-const SearchBar = () => {
+type SearchBarProps = {
+  style?: StyleProp<ViewStyle>;
+};
+
+const SearchBar = ({ style }: SearchBarProps) => {
   const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<number[]>([]);
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
@@ -34,11 +39,13 @@ const SearchBar = () => {
   };
 
   const toggleFilter = () => {
+    console.log('toggleFilter');
     setIsFilterOpen(prev => !prev);
   };
 
   const styles = StyleSheet.create({
     bar: {
+      position: 'relative',
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: theme.searchBarBg,
@@ -56,6 +63,16 @@ const SearchBar = () => {
       // i use marginVertical instead of paddingVertical
       // because padding will make bar bigger only
       marginVertical: 16,
+      ...{style},
+      zIndex: 1,
+    },
+    dropContainer: {
+      position: 'absolute',
+      backgroundColor: theme.background,
+      zIndex: 10,
+      left: 0,
+      right: 0,
+      top: 70
     },
     categoryName: {
       borderRadius: 100,
@@ -79,7 +96,7 @@ const SearchBar = () => {
     }
   });
 
-  const { data: categories, loading, error } = useFetchData<CategoryType[]>('/categories');
+  const { data: categories, loading, error } = useFetch<CategoryType[]>('/categories');
 
   if (loading) {
     return (
@@ -118,13 +135,13 @@ const SearchBar = () => {
         </TouchableOpacity>
       </View>
       {isFilterOpen && categories && (
-        <View>
+        <View style={styles.dropContainer}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             style={styles.scrollContainer}
           >
-            {categories.slice(0, 10).map(category => (
+            {categories.filter(category => category.image === null).map(category => (
               <TouchableOpacity
                 key={category.id}
                 onPress={() => toggleCategory(category.id)}
@@ -150,12 +167,12 @@ const SearchBar = () => {
             showsHorizontalScrollIndicator={false}
             style={styles.scrollContainer}
           >
-            {mockup_categories.map(category => (
+            {categories.filter(category => category.image !== null).map(category => (
               <Category
                 key={category.id}
                 id={category.id}
                 name={category.name}
-                categoryImage={category.categoryImage}
+                image={category.image}
               />
             ))}
           </ScrollView>
