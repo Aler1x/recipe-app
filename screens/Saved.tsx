@@ -50,7 +50,7 @@ const Saved = () => {
         onEndReached={fetchMore}
         onEndReachedThreshold={1}
         ListHeaderComponent={
-          <Text style={styles.listName}>Your saved ❤️</Text>
+          <Text style={styles.listName}>Your faves {recipes?.length === 0 ? "💔": "❤️"}</Text>
         }
         style={styles.recipesContainer}
         ListFooterComponent={
