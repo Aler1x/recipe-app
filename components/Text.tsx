@@ -1,9 +1,9 @@
-import { Text as NativeText, TextStyle } from "react-native";
+import { Text as NativeText, StyleProp, TextStyle } from "react-native";
 import { useTheme } from "../store/themeContext";
 
 type OwnProps = {
-  children: string | string[];
-  style?: TextStyle;
+  children?: React.ReactNode | undefined;
+  style?: StyleProp<TextStyle>;
   onForeground?: boolean;
 };
 

@@ -8,6 +8,7 @@ import CatIcon from './NavBar/CatIcon';
 import AddIcon from './NavBar/AddIcon';
 import SearchIcon from './SearchBar/SearchIcon';
 import FilterIcon from './SearchBar/FilterIcon';
+import CollapseIcon from './GroceryList/CollapseIcon';
 
 export {
   CalorieIcon,
@@ -20,4 +21,5 @@ export {
   AddIcon,
   SearchIcon,
   FilterIcon,
+  CollapseIcon
 };
