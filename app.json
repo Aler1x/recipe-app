@@ -36,10 +36,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "dev.cats.cookapp_frontend"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fcd8f61f-3496-4fdf-a609-b5b177c11d7e"
+      }
     }
   }
 }

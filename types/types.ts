@@ -6,33 +6,31 @@ export type Recipe = {
   image?: string;
   isSaved?: boolean; // filled heart icon
   calories: number;
-  readyInMinutes: number;
-  pricePerServing?: number;
-  servings?: number;
+  time: number;
+  price: number;
+  servings: number;
 }
 
 // for recipe screen
 export type RecipeFull = Recipe & {
   products: Ingredient[];
-  recipeSteps: RecipeStep[];
+  steps: RecipeStep[];
 }
 
 export type RecipeStep = {
-  id: number;
+  id: number; // for order steps
   description: string;
-  recipe: Recipe;
 }
 
 export type Product = {
   id: number;
   aisle: string;
-  name: number;
+  name: string;
 }
 
 export type Unit = {
   id: number;
   name: string;
-  isMetric: boolean;
 }
 
 export type Ingredient = {

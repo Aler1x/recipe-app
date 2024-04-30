@@ -9,6 +9,8 @@ import AddIcon from './NavBar/AddIcon';
 import SearchIcon from './SearchBar/SearchIcon';
 import FilterIcon from './SearchBar/FilterIcon';
 import CollapseIcon from './GroceryList/CollapseIcon';
+import LikeIcon from './Recipe/LikeIcon';
+import BackIcon from './Recipe/BackIcon';
 
 export {
   CalorieIcon,
@@ -21,5 +23,7 @@ export {
   AddIcon,
   SearchIcon,
   FilterIcon,
-  CollapseIcon
+  CollapseIcon,
+  LikeIcon,
+  BackIcon,
 };

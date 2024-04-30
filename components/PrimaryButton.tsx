@@ -4,13 +4,13 @@ import { useTheme } from '../store/themeContext';
 import Text from './Text';
 
 type OwnProps = {
-  title: string;
+  children: string;
   onPress: () => void;
   buttonStyle?: ViewStyle; 
   textStyle?: TextStyle; 
 };
 
-const PrimaryButton: React.FC<OwnProps> = ({ title, onPress, buttonStyle, textStyle }) => {
+const PrimaryButton: React.FC<OwnProps> = ({ children, onPress, buttonStyle, textStyle }) => {
   const { theme } = useTheme();
 
   const styles = StyleSheet.create({
@@ -26,7 +26,7 @@ const PrimaryButton: React.FC<OwnProps> = ({ title, onPress, buttonStyle, textSt
 
   return (
     <TouchableOpacity style={[styles.button, buttonStyle]} onPress={onPress}>
-      <Text style={textStyle} onForeground>{title}</Text>
+      <Text style={textStyle} onForeground>{children}</Text>
     </TouchableOpacity>
   );
 };

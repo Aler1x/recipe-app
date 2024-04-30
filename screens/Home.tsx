@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, FlatList, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import RecipeCard from '../components/HomePage/RecipeCard';
 import { useTheme } from '../store/themeContext';
 import SearchBar from '../components/HomePage/SearchBar';
@@ -47,9 +47,8 @@ const Home = () => {
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        {/* What evil make that string[] not work here */}
-        <Text>{`Error: ${error.message}`}</Text>
+      <View style={[styles.centered, styles.background]}>
+        <Text>Error: {error.message}</Text>
       </View>
     );
   }

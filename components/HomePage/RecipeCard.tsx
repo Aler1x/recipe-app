@@ -134,13 +134,13 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
               </View>
               <View style={styles.infoBlock}>
                 <TimeIcon />
-                <Text style={{ color: '#F3F3F3' }}>{`${recipe.readyInMinutes} min`}</Text>
+                <Text style={{ color: '#F3F3F3' }}>{`${recipe.time} min`}</Text>
               </View>
-              {recipe.pricePerServing && recipe.servings && (
+              {recipe.price && recipe.servings && (
                 <View style={styles.infoBlock}>
                   <MoneyIcon />
                   <Text style={{ color: '#F3F3F3' }}>
-                    {`$${(recipe.pricePerServing / recipe.servings).toFixed(2)}`}
+                    {`$${(recipe.price / recipe.servings).toFixed(2)}`}
                   </Text>
                 </View>
               )}

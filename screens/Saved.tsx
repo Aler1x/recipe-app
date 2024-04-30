@@ -20,7 +20,7 @@ const Saved = () => {
 
   if (error) {
     return (
-      <View style={styles.centered}>
+      <View style={[styles.centered, styles.background]}>
         <Text>Error: {error.message}</Text>
       </View>
     );

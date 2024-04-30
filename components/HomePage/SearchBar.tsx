@@ -15,6 +15,7 @@ import Category from './Category';
 import { useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { Category as CategoryType } from '../../types/types';
+import { Theme } from '../../styles/theme';
 
 type SearchBarProps = {
   style?: StyleProp<ViewStyle>;
@@ -44,58 +45,7 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
     setIsFilterOpen(prev => !prev);
   };
 
-  const styles = StyleSheet.create({
-    bar: {
-      position: 'relative',
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: theme.searchBarBg,
-      borderRadius: 16,
-      paddingVertical: 8,
-      paddingHorizontal: 22,
-      shadowColor: 'rgba(0,0,0,0.1)', // You can adjust the shadow color
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.1,
-      shadowRadius: 6,
-      elevation: 3, // For Android
-      alignSelf: 'center',
-      width: '90%',
-      // for spacing between the search bar and the content below and status bar
-      // i use marginVertical instead of paddingVertical
-      // because padding will make bar bigger only
-      marginVertical: 16,
-      ...{ style },
-      zIndex: 1,
-    },
-    // dropContainer: {
-    //   position: 'absolute',
-    //   backgroundColor: theme.background,
-    //   zIndex: 10,
-    //   left: 0,
-    //   right: 0,
-    //   top: 70
-    // },
-    categoryName: {
-      borderRadius: 100,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-      borderWidth: 1,
-      borderColor: theme.text,
-      marginRight: 8, // for spacing between categories (gap)
-    },
-    active: {
-      backgroundColor: theme.foreground,
-    },
-    scrollContainer: {
-      paddingHorizontal: 12,
-      paddingBottom: 16,
-    },
-    centered: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      flex: 1,
-    },
-  });
+  const styles = getStyles(theme, style);
 
   const {
     data: categories,
@@ -194,3 +144,57 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
 };
 
 export default SearchBar;
+
+const getStyles = (theme: Theme, style: StyleProp<ViewStyle>) =>
+  StyleSheet.create({
+    bar: {
+      position: 'relative',
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: theme.searchBarBg,
+      borderRadius: 16,
+      paddingVertical: 8,
+      paddingHorizontal: 22,
+      shadowColor: 'rgba(0,0,0,0.1)', // You can adjust the shadow color
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      elevation: 3, // For Android
+      alignSelf: 'center',
+      width: '90%',
+      // for spacing between the search bar and the content below and status bar
+      // i use marginVertical instead of paddingVertical
+      // because padding will make bar bigger only
+      marginVertical: 16,
+      ...{ style },
+      zIndex: 1,
+    },
+    // dropContainer: {
+    //   position: 'absolute',
+    //   backgroundColor: theme.background,
+    //   zIndex: 10,
+    //   left: 0,
+    //   right: 0,
+    //   top: 70
+    // },
+    categoryName: {
+      borderRadius: 100,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderWidth: 1,
+      borderColor: theme.text,
+      marginRight: 8, // for spacing between categories (gap)
+    },
+    active: {
+      backgroundColor: theme.foreground,
+    },
+    scrollContainer: {
+      paddingHorizontal: 12,
+      paddingBottom: 16,
+    },
+    centered: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+    },
+  });
