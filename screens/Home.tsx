@@ -38,7 +38,7 @@ const Home = () => {
     },
     circle: {
       position: 'absolute',
-      top: "30%",
+      top: "25%",
       left: 0,
     }
   });

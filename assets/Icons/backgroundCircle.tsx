@@ -12,9 +12,9 @@ const BackgroundCircle = ({
 }: BackgroundCircleProps) => {
   return (
     <Svg
-      width="430"
-      height="507"
-      viewBox="0 0 430 507"
+      width="946"
+      height="859"
+      viewBox="0 0 946 859"
       fill="none"
       style={style}
     >
