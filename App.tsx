@@ -8,11 +8,12 @@ import { useColorScheme } from 'react-native';
 import { lightTheme, darkTheme } from './styles/theme';
 import { createStackNavigator } from '@react-navigation/stack';
 import Recipe from './screens/Recipe';
+import Login from './screens/Login';
 
 export type RootStackParamList = {
   Main: undefined;
   Recipe: { id: number };
-  // Login: null;
+  Login: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -53,6 +54,7 @@ export default function App() {
         />
         <SafeAreaView style={{ flex: 1 }}>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="Main" component={BottomTabNavigator} />
               <Stack.Screen name="Recipe" component={Recipe} />
           </Stack.Navigator>

@@ -17,9 +17,9 @@ const Home = () => {
   const styles = StyleSheet.create({
     background: {
       backgroundColor: theme.background,
+      height: '100%',
     },
     recipesContainer: {
-      marginBottom: Dimensions.get('window').height * 0.08,
       zIndex: 1,
     },
     listName: {
@@ -38,7 +38,7 @@ const Home = () => {
     },
     circle: {
       position: 'absolute',
-      top: "25%",
+      top: "35%",
       left: 0,
     }
   });
@@ -66,7 +66,7 @@ const Home = () => {
 
   return (
     <View style={styles.background}>
-      <SearchBar style={{ zIndex: 2 }} />
+      <SearchBar style={{ zIndex: 2 }} includeCuisines />
       <FlatList
         data={recipes}
         renderItem={({ item }) => (

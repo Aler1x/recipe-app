@@ -1,5 +1,5 @@
 
-type Theme = {
+export type Theme = {
   background: string;
   foreground: string;
   /**

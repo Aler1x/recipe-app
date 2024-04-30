@@ -18,9 +18,10 @@ import { Category as CategoryType } from '../../types/types';
 
 type SearchBarProps = {
   style?: StyleProp<ViewStyle>;
+  includeCuisines?: boolean;
 };
 
-const SearchBar = ({ style }: SearchBarProps) => {
+const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
   const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<number[]>([]);
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
@@ -63,7 +64,7 @@ const SearchBar = ({ style }: SearchBarProps) => {
       // i use marginVertical instead of paddingVertical
       // because padding will make bar bigger only
       marginVertical: 16,
-      ...{style},
+      ...{ style },
       zIndex: 1,
     },
     // dropContainer: {
@@ -93,10 +94,14 @@ const SearchBar = ({ style }: SearchBarProps) => {
       justifyContent: 'center',
       alignItems: 'center',
       flex: 1,
-    }
+    },
   });
 
-  const { data: categories, loading, error } = useFetch<CategoryType[]>('/categories');
+  const {
+    data: categories,
+    loading,
+    error,
+  } = useFetch<CategoryType[]>('/categories');
 
   if (loading) {
     return (
@@ -141,41 +146,47 @@ const SearchBar = ({ style }: SearchBarProps) => {
             showsHorizontalScrollIndicator={false}
             style={styles.scrollContainer}
           >
-            {categories.filter(category => category.image === null).map(category => (
-              <TouchableOpacity
-                key={category.id}
-                onPress={() => toggleCategory(category.id)}
-                style={[
-                  styles.categoryName,
-                  isActive(category.id) ? styles.active : {},
-                ]}
-              >
-                <Text
-                  style={
-                    isActive(category.id)
-                      ? { color: theme.fgText }
-                      : { color: theme.text }
-                  }
+            {categories
+              .filter(category => category.image === null)
+              .map(category => (
+                <TouchableOpacity
+                  key={category.id}
+                  onPress={() => toggleCategory(category.id)}
+                  style={[
+                    styles.categoryName,
+                    isActive(category.id) ? styles.active : {},
+                  ]}
                 >
-                  {category.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={
+                      isActive(category.id)
+                        ? { color: theme.fgText }
+                        : { color: theme.text }
+                    }
+                  >
+                    {category.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
           </ScrollView>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.scrollContainer}
-          >
-            {categories.filter(category => category.image !== null).map(category => (
-              <Category
-                key={category.id}
-                id={category.id}
-                name={category.name}
-                image={category.image}
-              />
-            ))}
-          </ScrollView>
+          {includeCuisines && (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.scrollContainer}
+            >
+              {categories
+                .filter(category => category.image !== null)
+                .map(category => (
+                  <Category
+                    key={category.id}
+                    id={category.id}
+                    name={category.name}
+                    image={category.image}
+                  />
+                ))}
+            </ScrollView>
+          )}
         </View>
       )}
     </>

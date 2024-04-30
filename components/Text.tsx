@@ -2,7 +2,7 @@ import { Text as NativeText, TextStyle } from "react-native";
 import { useTheme } from "../store/themeContext";
 
 type OwnProps = {
-  children: string;
+  children: string | string[];
   style?: TextStyle;
   onForeground?: boolean;
 };
