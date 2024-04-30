@@ -6,6 +6,17 @@ import { NavigationContainer } from '@react-navigation/native';
 import BottomTabNavigator from './components/BottomTabNavigator';
 import { useColorScheme } from 'react-native';
 import { lightTheme, darkTheme } from './styles/theme';
+import { createStackNavigator } from '@react-navigation/stack';
+import Recipe from './screens/Recipe';
+
+export type RootStackParamList = {
+  Main: undefined;
+  Recipe: { id: number };
+  // Login: null;
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
 
 export default function App() {
   const colorScheme = useColorScheme();
@@ -30,9 +41,9 @@ export default function App() {
     <ThemeProvider>
       <NavigationContainer>
         {/* Here is BUTTPLUG because 
-          of unexpected reasons theme provider 
-          loaded after app, and new styles not applied, 
-          even if I use useLayoutEffect */}
+        react render from children to parent
+        and I cannot access to new state in ThemeProvider
+        from StatusBar */}
         <StatusBar
           backgroundColor={
             colorScheme === 'dark'
@@ -41,7 +52,10 @@ export default function App() {
           }
         />
         <SafeAreaView style={{ flex: 1 }}>
-          <BottomTabNavigator />
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Main" component={BottomTabNavigator} />
+              <Stack.Screen name="Recipe" component={Recipe} />
+          </Stack.Navigator>
         </SafeAreaView>
       </NavigationContainer>
     </ThemeProvider>

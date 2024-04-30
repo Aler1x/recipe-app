@@ -11,6 +11,38 @@ export type Recipe = {
   servings?: number;
 }
 
+// for recipe screen
+export type RecipeFull = Recipe & {
+  products: Ingredient[];
+  recipeSteps: RecipeStep[];
+}
+
+export type RecipeStep = {
+  id: number;
+  description: string;
+  recipe: Recipe;
+}
+
+export type Product = {
+  id: number;
+  aisle: string;
+  name: number;
+}
+
+export type Unit = {
+  id: number;
+  name: string;
+  isMetric: boolean;
+}
+
+export type Ingredient = {
+  id: number;
+  original: string;
+  amount: number;
+  unit: Unit,
+  product: Product;
+}
+
 export type Category = {
   id: number;
   name: string;

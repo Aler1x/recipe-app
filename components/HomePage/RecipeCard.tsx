@@ -99,7 +99,6 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
 
   return (
     <View style={styles.container}>
-
       <ImageBackground
         source={{ uri: recipe.image }}
         style={styles.background}
@@ -149,7 +148,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
           </View>
         </LinearGradient>
       </ImageBackground>
-    </View >
+    </View>
   );
 };
 

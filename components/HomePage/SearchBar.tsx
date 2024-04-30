@@ -66,14 +66,14 @@ const SearchBar = ({ style }: SearchBarProps) => {
       ...{style},
       zIndex: 1,
     },
-    dropContainer: {
-      position: 'absolute',
-      backgroundColor: theme.background,
-      zIndex: 10,
-      left: 0,
-      right: 0,
-      top: 70
-    },
+    // dropContainer: {
+    //   position: 'absolute',
+    //   backgroundColor: theme.background,
+    //   zIndex: 10,
+    //   left: 0,
+    //   right: 0,
+    //   top: 70
+    // },
     categoryName: {
       borderRadius: 100,
       paddingHorizontal: 12,
@@ -135,7 +135,7 @@ const SearchBar = ({ style }: SearchBarProps) => {
         </TouchableOpacity>
       </View>
       {isFilterOpen && categories && (
-        <View style={styles.dropContainer}>
+        <View>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}

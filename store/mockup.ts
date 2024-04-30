@@ -1,54 +1,34 @@
-import { Category } from '../types/types';
-
-export const mockup_categories: Category[] = [
-  {
-    id: 15,
-    name: 'Italian',
-    categoryImage: 'https://i.imgur.com/d6QvFgx.png',
-    categoryType: {
+const recipe_full = {
+  id: 1,
+  title: 'Recipe',
+  categories: [
+    {
       id: 1,
-      name: 'cuisine',
+      name: 'Category',
     },
-  },
-  {
-    id: 17,
-    name: 'American',
-    categoryImage: 'https://i.imgur.com/u0Ovrfn.png',
-    categoryType: {
+  ],
+  image: 'https://via.placeholder.com/150',
+  isSaved: true,
+  calories: 100,
+  readyInMinutes: 10,
+  pricePerServing: 1,
+  servings: 1,
+  products: [
+    {
       id: 1,
-      name: 'cuisine',
+      original: '1 cup of sugar',
+      amount: 1,
+      unit: {
+        id: 1,
+        name: 'cup',
+        isMetric: false,
+      },
+      product: {
+        id: 1,
+        aisle: 'Aisle',
+        name: 'Sugar',
+      },
     },
-  },
-  {
-    id: 37,
-    name: 'Asian',
-    categoryImage: 'https://i.imgur.com/OgkJzYV.png',
-    categoryType: {
-      id: 1,
-      name: 'cuisine',
-    },
-  },
-];
-
-export const mockup_name_categories: Category[] = [
-  {
-    id: 1,
-    name: '✅ Easy'  
-  },
-  {
-    id: 2,
-    name: '⚡ Quick'
-  },
-  {
-    id: 3,
-    name: '🍲 Breakfast'
-  },
-  {
-    id: 4,
-    name: '🍝 Dinner'
-  },
-  {
-    id: 5,
-    name: '🌿 Vegan'
-  }
-];
+  ],
+  
+};

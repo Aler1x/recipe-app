@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, FlatList, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import RecipeCard from '../components/HomePage/RecipeCard';
 import { useTheme } from '../store/themeContext';
 import SearchBar from '../components/HomePage/SearchBar';
@@ -6,16 +6,20 @@ import Text from '../components/Text';
 import { Recipe } from '../types/types';
 import BackgroundCircle from '../assets/Icons/backgroundCircle';
 import usePaginated from '../hooks/usePaginated';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../App';
 
 const Home = () => {
   const { theme } = useTheme();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const styles = StyleSheet.create({
     background: {
       backgroundColor: theme.background,
     },
     recipesContainer: {
-      marginBottom: Dimensions.get('window').height * 0.1,
+      marginBottom: Dimensions.get('window').height * 0.08,
       zIndex: 1,
     },
     listName: {
@@ -34,12 +38,12 @@ const Home = () => {
     },
     circle: {
       position: 'absolute',
-      bottom: -Dimensions.get('window').width,
-      left: Dimensions.get('window').width / 10,
+      top: "30%",
+      left: 0,
     }
   });
 
-  const { data: recipes, loading, error, fetchMore } = usePaginated<Recipe[]>('/recipes', 10);
+  const { data: recipes, error, fetchMore } = usePaginated<Recipe[]>('/recipes', 10);
 
   if (error) {
     return (
@@ -56,12 +60,20 @@ const Home = () => {
     });
   }
 
+  const redirect = (id: number) => {
+    navigation.navigate('Recipe', { id });
+  }
+
   return (
     <View style={styles.background}>
       <SearchBar style={{ zIndex: 2 }} />
       <FlatList
         data={recipes}
-        renderItem={({ item }) => <RecipeCard recipe={item} />}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => redirect(item.id)}>
+            <RecipeCard recipe={item} />
+          </TouchableOpacity> 
+        )}
         keyExtractor={(item) => item.id.toString()}
         onEndReached={fetchMore}
         onEndReachedThreshold={1}
@@ -70,9 +82,9 @@ const Home = () => {
         }
         style={styles.recipesContainer}
         ListFooterComponent={
-          loading ? <ActivityIndicator size="large" color={theme.text} /> : null
+          <ActivityIndicator size="large" color={theme.text} />
         }
-        windowSize={10}
+        windowSize={15}
       />
       <BackgroundCircle color={theme.bgCircle} style={styles.circle} />
     </View>

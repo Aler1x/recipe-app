@@ -3,30 +3,26 @@ import Svg, { Ellipse } from 'react-native-svg';
 
 type BackgroundCircleProps = {
   color?: string;
-  size?: number[];
   style?: StyleProp<ViewStyle>;
 };
 
 const BackgroundCircle = ({
   color = 'rgba(147, 190, 103, 0.12)',
-  size = [373, 429.5, 473, 429.5],
   style,
 }: BackgroundCircleProps) => {
-  const [cx, cy, rx, ry] = size;
-  const viewBox = `0 0 ${cx + rx} ${cy + ry}`;
   return (
     <Svg
-      width={cx + rx}
-      height={cy + ry}
-      viewBox={viewBox}
+      width="430"
+      height="507"
+      viewBox="0 0 430 507"
       fill="none"
       style={style}
     >
       <Ellipse
-        cx={cx.toString()}
-        cy={cy.toString()}
-        rx={rx.toString()}
-        ry={ry.toString()}
+        cx="373"
+        cy="429.5"
+        rx="473"
+        ry="429.5"
         fill={color}
         fillOpacity="1"
       />
