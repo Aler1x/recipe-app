@@ -4,6 +4,7 @@ import {
   View,
   FlatList,
   ActivityIndicator,
+  TextInput,
 } from 'react-native';
 import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
@@ -12,6 +13,7 @@ import { CollapseIcon } from '../assets/Icons';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getStoreData, storeData } from '../store/asyncStore';
+import BackgroundCircle from '../assets/Icons/backgroundCircle';
 
 type GroceryItem = {
   id: string;
@@ -69,8 +71,7 @@ const GroceryList = () => {
                   />
                 </TouchableOpacity>
                 {!isCompletedCollapsed && (
-                  <FlatList
-                    data={completedItems}
+                  <FlatList                    data={completedItems}
                     renderItem={({ item }) => renderItem(item, styles, true, () => onItemPress(item))}
                     keyExtractor={item => item.id}
                   />
@@ -90,6 +91,7 @@ const GroceryList = () => {
           </View>
         )}
       </View>
+      <BackgroundCircle color={theme.bgCircle} style={styles.circle} />
     </View>
   );
 };
@@ -98,22 +100,24 @@ function renderItem(item: GroceryItem, styles: any, isCompleted = false, onPress
   return (
     <TouchableOpacity onPress={onPress}>
       <View
-        style={[
-          styles.itemContainer,
-          isCompleted && styles.itemContainerCompleted,
-        ]}
+        style={styles.itemContainer}
       >
-        <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.icon}>{item.icon}</Text>
-          <Text
-            style={[styles.itemText, isCompleted && styles.itemTextCompleted]}
-          >
-            {item.title}
+        <View style={[
+          styles.itemCard,
+          isCompleted && styles.itemCardCompleted,
+        ]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.icon}>{item.icon}</Text>
+            <Text
+              style={[styles.itemText, isCompleted && styles.itemTextCompleted]}
+            >
+              {item.title}
+            </Text>
+          </View>
+          <Text style={styles.itemText}>
+            {item.quantity} {item.unit}
           </Text>
         </View>
-        <Text style={styles.itemText}>
-          {item.quantity} {item.unit}
-        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -130,29 +134,32 @@ const getStyles = (theme: Theme) =>
     },
     title: {
       fontSize: 22,
-      marginBottom: 24,
+      marginBottom: Dimensions.get('window').height * 0.03,
       fontFamily: 'TurbotaBold',
+      paddingHorizontal: Dimensions.get('window').width * 0.08,
     },
     container: {
-      paddingVertical: 40,
-      paddingHorizontal: 16,
-      maxWidth: 400,
+      paddingVertical: Dimensions.get('window').height * 0.05,
+      maxWidth: 500,
       width: '100%',
     },
     itemContainer: {
+      paddingHorizontal: Dimensions.get('window').width * 0.08,
+    },
+    itemCard: {
       width: '100%',
-      elevation: 20,
+      elevation: 5,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 20,
       paddingVertical: 16,
-      marginBottom: 20,
+      marginBottom: Dimensions.get('window').height * 0.017,
       borderRadius: 12,
 
       backgroundColor: theme.cardBg,
     },
-    itemContainerCompleted: {
+    itemCardCompleted: {
       backgroundColor: theme.inactiveCardBg,
     },
     icon: {
@@ -169,6 +176,7 @@ const getStyles = (theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: 10,
+      paddingHorizontal: Dimensions.get('window').width * 0.085,
     },
     headerText: {
       fontSize: 18,
@@ -179,4 +187,11 @@ const getStyles = (theme: Theme) =>
       justifyContent: 'center',
       marginBottom: -Dimensions.get('window').height * 0.075,
     },
+    circle: {
+      position: 'absolute',
+      transform: [{ scale: 1.1 }],
+      top: "14%",
+      left: 0,
+      zIndex: -1
+    }
   });
