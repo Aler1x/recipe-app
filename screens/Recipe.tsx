@@ -100,7 +100,7 @@ const Recipe = () => {
           {recipe.products.map((ingredient) => (
             <View key={ingredient.id} style={styles.ingredient}>
               <Text style={styles.ingredientName}>{ingredient.product.name}</Text>
-              <Text>{`${ingredient.amount}${ingredient.unit.name}`}</Text>
+              <Text>{`${ingredient.amount} ${ingredient.unit.name}`}</Text>
             </View>
           ))}
         </View>

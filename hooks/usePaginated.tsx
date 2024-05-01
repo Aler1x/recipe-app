@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { APP_URL } from '../constants';
+import { API_URL } from '../constants';
+import { getStoreData } from '../store/asyncStore';
 
 function usePaginated<T extends any[]>(
   endpoint: string,
@@ -16,33 +17,41 @@ function usePaginated<T extends any[]>(
 
   useEffect(() => {
     setLoading(true);
-    const url = `${APP_URL}${endpoint}?page=${page}&size=${size}`;
+    const url = `${API_URL}${endpoint}?page=${page}&size=${size}`;
     console.log(url);
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
+    getStoreData('jwtToken').then((token) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
       })
-      .then(responseData => {
-        setData(prev => {
-          if (prev) {
-            const currentIds = prev.map(item => item.id);
-            responseData.content = responseData.content.filter((item: any) => !currentIds.includes(item.id));
-            return [...prev, ...responseData.content];
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          return responseData.content;
+          return response.json();
+        })
+        .then(responseData => {
+          setData(prev => {
+            if (prev) {
+              const currentIds = prev.map(item => item.id);
+              responseData.content = responseData.content.filter((item: any) => !currentIds.includes(item.id));
+              return [...prev, ...responseData.content];
+            }
+            return responseData.content;
+          });
+          setError(null);
+        })
+        .catch(fetchError => {
+          setError(fetchError);
+          setData(null);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-        setError(null);
-      })
-      .catch(fetchError => {
-        setError(fetchError);
-        setData(null);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    });
   }, [endpoint, page]);
 
   return { data, loading, error, fetchMore };

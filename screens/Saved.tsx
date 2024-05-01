@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, FlatList, NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import RecipeCard from '../components/HomePage/RecipeCard';
 import { useTheme } from '../store/themeContext';
 import SearchBar from '../components/HomePage/SearchBar';
@@ -8,7 +8,7 @@ import BackgroundCircle from '../assets/Icons/backgroundCircle';
 import usePaginated from '../hooks/usePaginated';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../App';
+import { RootStackParamList } from '../types/types';
 import { Theme } from '../styles/theme';
 
 const Saved = () => {

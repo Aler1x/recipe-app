@@ -8,7 +8,7 @@ import BackgroundCircle from '../assets/Icons/backgroundCircle';
 import usePaginated from '../hooks/usePaginated';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../App';
+import { RootStackParamList } from '../types/types';
 
 const Home = () => {
   const { theme } = useTheme();

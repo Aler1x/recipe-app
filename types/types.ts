@@ -11,6 +11,12 @@ export type Recipe = {
   servings: number;
 }
 
+export type RootStackParamList = {
+  Main: undefined;
+  Recipe: { id: number };
+  Login: undefined;
+};
+
 // for recipe screen
 export type RecipeFull = Recipe & {
   products: Ingredient[];

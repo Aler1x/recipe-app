@@ -9,12 +9,7 @@ import { lightTheme, darkTheme } from './styles/theme';
 import { createStackNavigator } from '@react-navigation/stack';
 import Recipe from './screens/Recipe';
 import Login from './screens/Login';
-
-export type RootStackParamList = {
-  Main: undefined;
-  Recipe: { id: number };
-  Login: undefined;
-};
+import { RootStackParamList } from './types/types';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
