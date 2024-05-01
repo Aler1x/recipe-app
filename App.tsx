@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Recipe from './screens/Recipe';
 import Login from './screens/Login';
 import { RootStackParamList } from './types/types';
+import { GroceryProvider } from './store/groceryItemsContext';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -47,13 +48,15 @@ export default function App() {
               : lightTheme.background
           }
         />
-        <SafeAreaView style={{ flex: 1 }}>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Main" component={BottomTabNavigator} />
-              <Stack.Screen name="Recipe" component={Recipe} />
-          </Stack.Navigator>
-        </SafeAreaView>
+        <GroceryProvider>
+          <SafeAreaView style={{ flex: 1 }}>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Main" component={BottomTabNavigator} />
+                <Stack.Screen name="Recipe" component={Recipe} />
+            </Stack.Navigator>
+          </SafeAreaView>
+        </GroceryProvider>
       </NavigationContainer>
     </ThemeProvider>
   );

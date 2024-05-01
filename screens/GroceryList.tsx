@@ -9,44 +9,25 @@ import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
 import { Theme } from '../styles/theme';
 import { CollapseIcon } from '../assets/Icons';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getStoreData, storeData } from '../store/asyncStore';
 import BackgroundCircle from '../assets/Icons/backgroundCircle';
+import { GroceryItem, useGroceryContext } from '../store/groceryItemsContext';
 
-type GroceryItem = {
-  id: string;
-  title: string;
-  quantity: number;
-  unit: string;
-  icon: string;
-  completed: boolean;
-};
-
-const GROCERY_ITEMS_KEY = 'groceryItems';
 
 const GroceryList = () => {
   const { theme } = useTheme();
   const styles = getStyles(theme);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isCompletedCollapsed, setIsCompletedCollapsed] = useState(true);
-  const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
-
-  useEffect(() => {
-    getStoreData<GroceryItem[]>(GROCERY_ITEMS_KEY).then(data => {
-      if (data) {
-        setGroceryItems(data);
-      }
-    }).finally(() => setLoading(false));
-  }, []);
+  const { groceryItems, saveGroceryItems } = useGroceryContext();
 
   const activeItems = groceryItems.filter(item => !item.completed);
   const completedItems = groceryItems.filter(item => item.completed);
 
   const onItemPress = (item: GroceryItem) => {
     item.completed = !item.completed;
-    setGroceryItems([...groceryItems]);
-    storeData(GROCERY_ITEMS_KEY, groceryItems);
+    saveGroceryItems([...groceryItems]);
   };
 
   return (

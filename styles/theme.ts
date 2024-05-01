@@ -28,7 +28,7 @@ export type Theme = {
 
 const commonTheme = {
   searchBarBg: '#F3F3F3',
-  generalShadow: 'rgba(0, 0, 0, 15)',
+  generalShadow: 'rgba(0, 0, 0, 0.15)',
   categoryCardShadow: 'rgba(0, 0, 0, 0.55)',
 };
 
