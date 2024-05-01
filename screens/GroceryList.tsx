@@ -4,7 +4,6 @@ import {
   View,
   FlatList,
   ActivityIndicator,
-  TextInput,
 } from 'react-native';
 import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
