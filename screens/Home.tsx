@@ -53,12 +53,6 @@ const Home = () => {
     );
   }
 
-  if (recipes) {
-    recipes.forEach(recipe => {
-      recipe.calories = Math.floor(Math.random() * 1000);
-    });
-  }
-
   const redirect = (id: number) => {
     navigation.navigate('Recipe', { id });
   }

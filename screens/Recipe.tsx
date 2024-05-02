@@ -76,8 +76,6 @@ const Recipe = () => {
     );
   }
 
-  recipe.calories = Math.floor(Math.random() * 1000);
-
   return (
     <View style={{ backgroundColor: theme.background, flex: 1 }}>
       <ScrollView style={styles.background}>
@@ -136,10 +134,10 @@ const Recipe = () => {
               <View
                 style={{ flexDirection: 'row', gap: 5, alignItems: 'center' }}
               >
-                <Text>{`${ingredient.amount} ${ingredient.unit.name}`}</Text>
+                <Text>{`${Math.round(ingredient.amount * 10)/10} ${ingredient.unit.name}`}</Text>
                 {
                   groceryItems.find(item => item.id === ingredient.id.toString()) ? (
-                    <Text style={{ color: 'green', fontSize: 20 }}>🛒</Text>
+                    <Text style={{ color: 'green', fontSize: 16 }}>🛒</Text>
                   ) : <TouchableOpacity
                   onPress={() => {
                     getStoreData<GroceryItem[]>(GROCERY_ITEMS_KEY).then((data) => {
@@ -302,7 +300,7 @@ const getStyles = (theme: Theme) =>
       paddingHorizontal: 8,
     },
     ingredientName: {
-      maxWidth: '70%',
+      maxWidth: '60%',
     },
     stepsContainer: {
       paddingVertical: Dimensions.get('window').width * 0.02,

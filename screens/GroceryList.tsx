@@ -30,6 +30,10 @@ const GroceryList = () => {
     saveGroceryItems([...groceryItems]);
   };
 
+  const removeCompletedItems = () => {
+    saveGroceryItems(activeItems);
+  };
+
   return (
     <View style={styles.background}>
       <View style={styles.container}>
@@ -37,6 +41,7 @@ const GroceryList = () => {
         {loading && <ActivityIndicator size="large" color={theme.text} />}
         <FlatList
           data={activeItems}
+          contentContainerStyle={{ paddingVertical: 16 }}
           ListFooterComponent={() =>
             completedItems.length > 0 ? (
               <View>
@@ -51,9 +56,16 @@ const GroceryList = () => {
                   />
                 </TouchableOpacity>
                 {!isCompletedCollapsed && (
-                  <FlatList                    data={completedItems}
+                  <FlatList data={completedItems}
                     renderItem={({ item }) => renderItem(item, styles, true, () => onItemPress(item))}
                     keyExtractor={item => item.id}
+                    ListFooterComponent={() => (
+                      <TouchableOpacity onPress={removeCompletedItems}>
+                        <Text style={{ color: theme.text, textAlign: 'center', textDecorationLine: 'underline', marginBottom: 28 }}>
+                          Remove completed
+                        </Text>
+                      </TouchableOpacity>
+                    )}
                   />
                 )}
               </View>
@@ -78,26 +90,22 @@ const GroceryList = () => {
 
 function renderItem(item: GroceryItem, styles: any, isCompleted = false, onPress?: () => void) {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View
-        style={styles.itemContainer}
-      >
-        <View style={[
-          styles.itemCard,
-          isCompleted && styles.itemCardCompleted,
-        ]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.icon}>{item.icon}</Text>
-            <Text
-              style={[styles.itemText, isCompleted && styles.itemTextCompleted]}
-            >
-              {item.title}
-            </Text>
-          </View>
-          <Text style={styles.itemText}>
-            {item.quantity} {item.unit}
+    <TouchableOpacity onPress={onPress} style={styles.itemContainer}>
+      <View style={[
+        styles.itemCard,
+        isCompleted && styles.itemCardCompleted,
+      ]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.icon}>{item.icon}</Text>
+          <Text
+            style={[styles.itemText, isCompleted && styles.itemTextCompleted]}
+          >
+            {item.title}
           </Text>
         </View>
+        <Text style={styles.itemText}>
+          {Math.round(item.quantity * 10) / 10} {item.unit}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -113,8 +121,8 @@ const getStyles = (theme: Theme) =>
       alignItems: 'center',
     },
     title: {
-      fontSize: 22,
-      marginBottom: Dimensions.get('window').height * 0.03,
+      fontSize: 21,
+      marginBottom: Dimensions.get('window').height * 0.01,
       fontFamily: 'TurbotaBold',
       paddingHorizontal: Dimensions.get('window').width * 0.08,
     },
@@ -134,9 +142,8 @@ const getStyles = (theme: Theme) =>
       alignItems: 'center',
       paddingHorizontal: 20,
       paddingVertical: 16,
-      marginBottom: Dimensions.get('window').height * 0.017,
       borderRadius: 12,
-
+      marginBottom: Dimensions.get('window').height * 0.017,
       backgroundColor: theme.cardBg,
     },
     itemCardCompleted: {
@@ -147,6 +154,7 @@ const getStyles = (theme: Theme) =>
     },
     itemText: {
       fontSize: 16,
+      maxWidth: '70%',
     },
     itemTextCompleted: {
       textDecorationLine: 'line-through',

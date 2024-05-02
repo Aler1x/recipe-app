@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -26,6 +26,25 @@ const Login = () => {
   const handleIsLogin = () => {
     setIsSignIn(prev => !prev);
   };
+
+  useEffect(() => {
+    getStoreData('jwtToken').then(token => {
+      if (token) {
+        fetch(API_URL + '/recipes?size=1',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+          }).then(response => {
+            if (response.ok) {
+              navigation.navigate('Main');
+            }
+          });
+      }
+    });
+  }, []);
 
   const styles = StyleSheet.create({
     background: {
