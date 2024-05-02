@@ -1,4 +1,4 @@
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
 import Svg, { Ellipse } from 'react-native-svg';
 
 type BackgroundCircleProps = {
@@ -10,13 +10,20 @@ const BackgroundCircle = ({
   color = 'rgba(147, 190, 103, 0.12)',
   style,
 }: BackgroundCircleProps) => {
+  const defaults = StyleSheet.create({
+    circle : {
+      position: 'absolute',
+      zIndex: -1,
+    }
+  });
+
   return (
     <Svg
       width="946"
       height="859"
       viewBox="0 0 946 859"
       fill="none"
-      style={style}
+      style={[defaults.circle, style]}
     >
       <Ellipse
         cx="373"

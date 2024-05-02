@@ -4,6 +4,7 @@ import {
   View,
   FlatList,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
@@ -45,7 +46,7 @@ const GroceryList = () => {
           ListFooterComponent={() =>
             completedItems.length > 0 ? (
               <View>
-                <TouchableOpacity
+                <Pressable
                   style={styles.header}
                   onPress={() => setIsCompletedCollapsed(!isCompletedCollapsed)}
                 >
@@ -54,17 +55,17 @@ const GroceryList = () => {
                     open={!isCompletedCollapsed}
                     color={theme.text}
                   />
-                </TouchableOpacity>
+                </Pressable>
                 {!isCompletedCollapsed && (
                   <FlatList data={completedItems}
                     renderItem={({ item }) => renderItem(item, styles, true, () => onItemPress(item))}
                     keyExtractor={item => item.id}
                     ListFooterComponent={() => (
-                      <TouchableOpacity onPress={removeCompletedItems}>
+                      <Pressable onPress={removeCompletedItems}>
                         <Text style={{ color: theme.text, textAlign: 'center', textDecorationLine: 'underline', marginBottom: 28 }}>
                           Remove completed
                         </Text>
-                      </TouchableOpacity>
+                      </Pressable>
                     )}
                   />
                 )}
@@ -144,7 +145,7 @@ const getStyles = (theme: Theme) =>
       paddingVertical: 16,
       borderRadius: 12,
       marginBottom: Dimensions.get('window').height * 0.017,
-      backgroundColor: theme.cardBg,
+      backgroundColor: theme.cardBackground,
     },
     itemCardCompleted: {
       backgroundColor: theme.inactiveCardBg,

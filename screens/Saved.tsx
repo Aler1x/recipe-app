@@ -1,21 +1,25 @@
-import { ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, RefreshControl, StyleSheet, TouchableOpacity, View } from 'react-native';
 import RecipeCard from '../components/HomePage/RecipeCard';
 import { useTheme } from '../store/themeContext';
 import SearchBar from '../components/HomePage/SearchBar';
 import Text from '../components/Text';
 import { Recipe } from '../types/types';
 import BackgroundCircle from '../assets/Icons/backgroundCircle';
-import usePaginated from '../hooks/usePaginated';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/types';
 import { Theme } from '../styles/theme';
+import useFetch from '../hooks/useFetch';
 
 const Saved = () => {
   const { theme } = useTheme();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  const { data: recipes, error, fetchMore } = usePaginated<Recipe[]>('/recipes', 10);
+  const { data, error, refetch } = useFetch<{
+    id: number;
+    name: string;
+    recipes: Recipe[];
+  }>('/user/lists/faves');
   const styles = getStyles(theme);
 
   if (error) {
@@ -26,12 +30,6 @@ const Saved = () => {
     );
   }
 
-  if (recipes) {
-    recipes.forEach(recipe => {
-      recipe.calories = Math.floor(Math.random() * 1000);
-    });
-  }
-
   const redirect = (id: number) => {
     navigation.navigate('Recipe', { id });
   }
@@ -40,22 +38,21 @@ const Saved = () => {
     <View style={styles.background}>
       <SearchBar style={{ zIndex: 2 }} />
       <FlatList
-        data={recipes}
+        data={data?.recipes}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => redirect(item.id)}>
             <RecipeCard recipe={item} />
           </TouchableOpacity> 
         )}
         keyExtractor={(item) => item.id.toString()}
-        onEndReached={fetchMore}
         onEndReachedThreshold={1}
         ListHeaderComponent={
-          <Text style={styles.listName}>Your faves {recipes?.length === 0 ? "💔": "❤️"}</Text>
+          <Text style={styles.listName}>Your faves {data?.recipes?.length === 0 ? "💔": "❤️"}</Text>
+        }
+        refreshControl={
+          <RefreshControl refreshing={!data} onRefresh={refetch} />
         }
         style={styles.recipesContainer}
-        ListFooterComponent={
-          <ActivityIndicator size="large" color={theme.text} />
-        }
         windowSize={15}
       />
       <BackgroundCircle color={theme.bgCircle} style={styles.circle} />

@@ -2,9 +2,9 @@ import { Recipe } from '../../types/types';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   ImageBackground,
-  Dimensions
+  Dimensions,
+  Pressable
 } from 'react-native';
 import Text from '../Text';
 import { CalorieIcon, TimeIcon, HearthIcon, MoneyIcon } from '../../assets/Icons';
@@ -114,9 +114,9 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
               </Text>
             ))}
           </View>
-          <TouchableOpacity style={{ zIndex: 1 }} onPress={toggleSaved}>
-            <HearthIcon color="#F3F3F3" isFilled={isSaved} />
-          </TouchableOpacity>
+          <Pressable style={{ zIndex: 1 }} onPress={toggleSaved}>
+            <HearthIcon color="#F3F3F3" isFilled={isSaved} size={33} />
+          </Pressable>
         </View>
 
         {/* bottom section with fucking gradient (please fuck out) */}

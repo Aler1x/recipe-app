@@ -1,10 +1,10 @@
 import {
   ActivityIndicator,
+  Pressable,
   ScrollView,
   StyleProp,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -47,29 +47,40 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
 
   const styles = getStyles(theme, style);
 
-  const {
-    data: categories,
-    loading,
-    error,
-  } = useFetch<CategoryType[]>('/categories');
+  let categories: CategoryType[] = [];
 
-  if (loading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={theme.text} />
-      </View>
-    );
+  if (includeCuisines) {
+    const {
+      data,
+      loading,
+      error,
+    } = useFetch<CategoryType[]>('/categories');
+
+    if (loading) {
+      return (
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={theme.text} />
+        </View>
+      );
+    }
+
+    if (error) {
+      console.error('Error loading categories: ', error);
+      return (
+        <View style={styles.centered}>
+          <Text>Error: ${error.message}</Text>
+        </View>
+      );
+    }
+
+    if (data) {
+      categories = data;
+    }
   }
 
-  if (error) {
-    console.error('Error loading categories: ', error);
-    return (
-      <View style={styles.centered}>
-        {/* What evil make that string[] not work here */}
-        <Text>{`Error: ${error.message}`}</Text>
-      </View>
-    );
-  }
+  const onInput = (text: string) => {
+    console.log('onInput', text);
+  };
 
   return (
     <>
@@ -79,15 +90,19 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
           placeholder="Search"
           style={{
             flex: 1,
-            color: theme.text,
+            color: '#181818',
             fontFamily: 'TurbotaBook',
             fontSize: 16,
             paddingHorizontal: 12,
           }}
+          placeholderTextColor='#181818'
+          onChangeText={onInput}
         />
-        <TouchableOpacity onPress={() => toggleFilter()}>
-          <FilterIcon />
-        </TouchableOpacity>
+        {includeCuisines && (
+          <Pressable onPress={() => toggleFilter()}>
+            <FilterIcon />
+          </Pressable>
+        )}
       </View>
       {isFilterOpen && categories && (
         <View>
@@ -99,7 +114,7 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
             {categories
               .filter(category => category.image === null)
               .map(category => (
-                <TouchableOpacity
+                <Pressable
                   key={category.id}
                   onPress={() => toggleCategory(category.id)}
                   style={[
@@ -116,7 +131,7 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
                   >
                     {category.name}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               ))}
           </ScrollView>
           {includeCuisines && (

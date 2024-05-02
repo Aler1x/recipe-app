@@ -11,6 +11,12 @@ import FilterIcon from './SearchBar/FilterIcon';
 import CollapseIcon from './GroceryList/CollapseIcon';
 import LikeIcon from './Recipe/LikeIcon';
 import BackIcon from './Recipe/BackIcon';
+import BookmarkIcon from './Profile/BookmarkIcon';
+import MailIcon from './Profile/MailIcon';
+import RecipeIcon from './Profile/RecipesIcon';
+import StatisticIcon from './Profile/StatisticIcon';
+import MoonIcon from './Profile/MoonIcon';
+import SunIcon from './Profile/SunIcon';
 
 export {
   CalorieIcon,
@@ -26,4 +32,10 @@ export {
   CollapseIcon,
   LikeIcon,
   BackIcon,
+  BookmarkIcon,
+  MailIcon,
+  RecipeIcon,
+  StatisticIcon,
+  MoonIcon,
+  SunIcon,
 };

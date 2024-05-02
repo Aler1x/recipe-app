@@ -1,4 +1,11 @@
-import { ActivityIndicator, Dimensions, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import RecipeCard from '../components/HomePage/RecipeCard';
 import { useTheme } from '../store/themeContext';
 import SearchBar from '../components/HomePage/SearchBar';
@@ -9,6 +16,7 @@ import usePaginated from '../hooks/usePaginated';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/types';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 const Home = () => {
   const { theme } = useTheme();
@@ -37,13 +45,17 @@ const Home = () => {
       paddingBottom: Dimensions.get('window').height * 0.1, // for better spinner visibility (nav bar hides it otherwise)
     },
     circle: {
-      position: 'absolute',
-      top: "35%",
+      top: '35%',
       left: 0,
-    }
+    },
   });
 
-  const { data: recipes, error, fetchMore } = usePaginated<Recipe[]>('/recipes', 10);
+  const {
+    data: recipes,
+    error,
+    fetchMore,
+    refetch,
+  } = usePaginated<Recipe[]>('/recipes', 10);
 
   if (error) {
     return (
@@ -55,7 +67,7 @@ const Home = () => {
 
   const redirect = (id: number) => {
     navigation.navigate('Recipe', { id });
-  }
+  };
 
   return (
     <View style={styles.background}>
@@ -65,9 +77,9 @@ const Home = () => {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => redirect(item.id)}>
             <RecipeCard recipe={item} />
-          </TouchableOpacity> 
+          </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         onEndReached={fetchMore}
         onEndReachedThreshold={1}
         ListHeaderComponent={
@@ -75,7 +87,14 @@ const Home = () => {
         }
         style={styles.recipesContainer}
         ListFooterComponent={
-          <ActivityIndicator size="large" color={theme.text} />
+          <>
+            {recipes &&
+              <ActivityIndicator size="large" color={theme.text} />
+            }
+          </>
+        }
+        refreshControl={
+          <RefreshControl refreshing={!recipes} onRefresh={refetch} />
         }
         windowSize={15}
       />

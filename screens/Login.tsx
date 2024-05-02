@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TextInput,
   Dimensions,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
@@ -166,14 +166,14 @@ const Login = () => {
         >
           {isSignIn ? 'Create account' : 'Login'}
         </PrimaryButton>
-        <TouchableOpacity
+        <Pressable
           style={styles.signInShitTapper}
           onPress={handleIsLogin}
         >
           <Text style={{ color: theme.text }}>
             {isSignIn ? 'Login' : 'Create account'}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
