@@ -32,6 +32,7 @@ export type Product = {
   id: number;
   aisle: string;
   name: string;
+  image: string | null;
 }
 
 export type Unit = {

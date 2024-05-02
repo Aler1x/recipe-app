@@ -9,7 +9,7 @@ import {
 import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
 import useFetch from '../hooks/useFetch';
-import { RecipeFull } from '../types/types';
+import { Ingredient, RecipeFull } from '../types/types';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Theme } from '../styles/theme';
@@ -25,6 +25,7 @@ import BackgroundCircle from '../assets/Icons/backgroundCircle';
 import { useState } from 'react';
 import { getStoreData } from '../store/asyncStore';
 import { GROCERY_ITEMS_KEY, GroceryItem, useGroceryContext } from '../store/groceryItemsContext';
+import PRODUCT_TO_EMOJI from '../store/productToEmoji';
 
 const Recipe = () => {
   const { theme } = useTheme();
@@ -74,6 +75,33 @@ const Recipe = () => {
         <Text>Recipe not found</Text>
       </View>
     );
+  }
+
+  const saveIngredientToGroceryList = (ingredient: Ingredient) => {
+    getStoreData<GroceryItem[]>(GROCERY_ITEMS_KEY).then((data) => {
+      if (!data) {
+        data = [];
+      }
+
+      const existing = data.find((item) => item.id === ingredient.id.toString());
+      if (existing) {
+        existing.quantity += ingredient.amount;
+        saveGroceryItems(data);
+        return;
+      }
+
+      const fileName = ingredient.product.image?.split('.')[0]
+      const newData = [...data, {
+          id: ingredient.id.toString(),
+          title: ingredient.product.name,
+          quantity: ingredient.amount,
+          unit: ingredient.unit.name,
+          completed: false,
+          icon: PRODUCT_TO_EMOJI[fileName ?? ""] ?? '🤔',
+        } satisfies GroceryItem
+      ];  
+      saveGroceryItems(newData);
+    });
   }
 
   return (
@@ -139,30 +167,7 @@ const Recipe = () => {
                   groceryItems.find(item => item.id === ingredient.id.toString()) ? (
                     <Text style={{ color: 'green', fontSize: 16 }}>🛒</Text>
                   ) : <TouchableOpacity
-                  onPress={() => {
-                    getStoreData<GroceryItem[]>(GROCERY_ITEMS_KEY).then((data) => {
-                      if (!data) {
-                        data = [];
-                      }
-
-                      const existing = data.find((item) => item.id === ingredient.id.toString());
-                      if (existing) {
-                        existing.quantity += ingredient.amount;
-                        saveGroceryItems(data);
-                        return;
-                      }
-                      const newData = [...data, {
-                          id: ingredient.id.toString(),
-                          title: ingredient.product.name,
-                          quantity: ingredient.amount,
-                          unit: ingredient.unit.name,
-                          completed: false,
-                          icon: '🛒',
-                        } satisfies GroceryItem
-                      ];  
-                      saveGroceryItems(newData);
-                  });
-                 }}
+                  onPress={() => saveIngredientToGroceryList(ingredient)}
                   style={{
                     padding: 10,
                     backgroundColor: 'rgba(0, 0, 0, 0.05)',
