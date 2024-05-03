@@ -22,8 +22,6 @@ import { RefreshControl } from 'react-native-gesture-handler';
 import { useCallback, useEffect, useState } from 'react';
 import useFetch from '../hooks/useFetch';
 import { Theme } from '../styles/theme';
-import { set } from 'react-hook-form';
-import { ref } from 'yup';
 
 const Home = () => {
   const { theme } = useTheme();
@@ -38,7 +36,9 @@ const Home = () => {
     error,
     fetchMore,
     refetch,
-  } = usePaginated<Recipe[]>('/recipes', 10, activeCategory);
+    addCategory,
+    removeCategory,
+  } = usePaginated<Recipe[]>('/recipes', 10);
 
   useEffect(() => {
     refetch();
@@ -63,12 +63,16 @@ const Home = () => {
   };
 
   const toggleCategory = useCallback((name: string) => {
-    if (isActive(name)) {
-      setActiveCategory(activeCategory.filter((category) => category !== name));
-    } else {
+    if (!isActive(name)) {
       setActiveCategory([...activeCategory, name]);
+      addCategory(name);
+      console.log('add', name);
+    } else {
+      setActiveCategory(activeCategory.filter((category) => category !== name));
+      removeCategory(name);
+      console.log('remove', name);
     }
-  }, [activeCategory]);
+  }, [activeCategory, addCategory, removeCategory, setActiveCategory, categories]);
 
   return (
     <View style={styles.background}>
@@ -81,7 +85,6 @@ const Home = () => {
             style={styles.scrollContainer}
           >
             {categories
-              .filter(category => category.image === null)
               .map(category => (
                 <Pressable
                   key={category.id}
