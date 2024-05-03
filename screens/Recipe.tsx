@@ -27,6 +27,7 @@ import { getStoreData } from '../store/asyncStore';
 import { GROCERY_ITEMS_KEY, GroceryItem, useGroceryContext } from '../store/groceryItemsContext';
 import PRODUCT_TO_EMOJI from '../store/productToEmoji';
 import { useFavesContext } from '../store/favesContext';
+import { STEP_CIRCLE_SIZE } from '../constants';
 
 const Recipe = () => {
   const { theme } = useTheme();
@@ -334,9 +335,9 @@ const getStyles = (theme: Theme) =>
       gap: 12,
     },
     stepCircle: {
-      width: 20,
-      height: 20,
-      borderRadius: 12,
+      width: STEP_CIRCLE_SIZE,
+      height: STEP_CIRCLE_SIZE,
+      borderRadius: 50,
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
@@ -346,12 +347,14 @@ const getStyles = (theme: Theme) =>
     stepLine: {
       width: 1,
       backgroundColor: theme.text,
-      height: '85%',
       position: 'absolute',
-      left: 10,
+      left: STEP_CIRCLE_SIZE / 2,
       bottom: 0,
+      top: STEP_CIRCLE_SIZE,
     },
     step: {
       paddingVertical: 4,
+      paddingLeft: STEP_CIRCLE_SIZE,
+      minHeight: STEP_CIRCLE_SIZE
     },
   });

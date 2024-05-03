@@ -44,6 +44,7 @@ const BottomTabNavigator = () => {
     <Tab.Navigator
       screenOptions={
         {
+          tabBarHideOnKeyboard: true,
           tabBarStyle: styles.bar,
           tabBarShowLabel: false,
           headerShown: false,

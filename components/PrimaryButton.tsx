@@ -6,11 +6,11 @@ import Text from './Text';
 type OwnProps = {
   children: string;
   onPress: () => void;
-  buttonStyle?: ViewStyle; 
+  style?: ViewStyle; 
   textStyle?: TextStyle; 
 };
 
-const PrimaryButton: React.FC<OwnProps> = ({ children, onPress, buttonStyle, textStyle }) => {
+const PrimaryButton: React.FC<OwnProps> = ({ children, onPress, style: buttonStyle, textStyle }) => {
   const { theme } = useTheme();
 
   const styles = StyleSheet.create({

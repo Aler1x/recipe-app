@@ -17,6 +17,7 @@ import RecipeIcon from './Profile/RecipesIcon';
 import StatisticIcon from './Profile/StatisticIcon';
 import MoonIcon from './Profile/MoonIcon';
 import SunIcon from './Profile/SunIcon';
+import ClearIcon from './ClearIcon';
 
 export {
   CalorieIcon,
@@ -38,4 +39,5 @@ export {
   StatisticIcon,
   MoonIcon,
   SunIcon,
+  ClearIcon,
 };

@@ -8,6 +8,8 @@ export type Theme = {
   fgText: string;
   text: string;
   bgCircle: string;
+  placeholder: string;
+
   modalBg: string;
   backdrop: string;
   /**
@@ -41,13 +43,14 @@ export const lightTheme: Theme = {
   foreground: '#181818',
   fgText: '#F3F3F3',
   text: '#181818',
+  placeholder: '#9B9B9B',
   bgCircle: 'rgba(147, 190, 103, 0.12)',
   modalBg: '#F3F3F3',
   backdrop: 'rgba(32, 32, 32, 0.23)',
   cardBackground: '#FFFFFF',
   inactiveCardBg: '#FAFAFA',
-  stepDone: '#3D974B',
-  stepUndone: '#D5D5D5',
+  stepDone: '#82AC88',
+  stepUndone: '#E2E2E2',
   recipeImageInnerShadow: 'rgba(255,255,255,0.65)',
   userIcon: '#F3F3F3',
 
@@ -59,12 +62,13 @@ export const darkTheme: Theme = {
   foreground: '#F3F3F3',
   fgText: '#181818',
   text: '#F3F3F3',
+  placeholder: '#696969',
   bgCircle: 'rgba(37, 44, 34, 0.34)',
   modalBg: '#181818',
   backdrop: 'rgba(0, 0, 0, 0.27)',
   cardBackground: '#232323',
   inactiveCardBg: '#1F1F1F',
-  stepDone: '#3D974B',
+  stepDone: '#3F6D46',
   stepUndone: '#6B6B6B',
   recipeImageInnerShadow: 'rgba(18,18,18, 0.65)',
   userIcon: '#303030',

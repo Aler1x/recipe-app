@@ -19,9 +19,8 @@ import { GroceryItem, useGroceryContext } from '../store/groceryItemsContext';
 const GroceryList = () => {
   const { theme } = useTheme();
   const styles = getStyles(theme);
-  const [loading, setLoading] = useState(false);
   const [isCompletedCollapsed, setIsCompletedCollapsed] = useState(true);
-  const { groceryItems, saveGroceryItems } = useGroceryContext();
+  const { groceryItems, saveGroceryItems, loading } = useGroceryContext();
 
   const activeItems = groceryItems.filter(item => !item.completed);
   const completedItems = groceryItems.filter(item => item.completed);

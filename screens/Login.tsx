@@ -136,7 +136,7 @@ const Login = () => {
           placeholderTextColor={theme.text}
         />
         <PrimaryButton
-          buttonStyle={styles.buttonStyle}
+          style={styles.buttonStyle}
           onPress={isSignIn ? handleSignUp : handleLogin}
         >
           {isSignIn ? 'Create account' : 'Login'}

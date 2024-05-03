@@ -17,7 +17,8 @@ export const GROCERY_ITEMS_KEY = 'groceryItems';
 // Type definition for the context state
 interface GroceryContextType {
   groceryItems: GroceryItem[];
-  saveGroceryItems: (items: GroceryItem[]) => void;
+  saveGroceryItems: (items: GroceryItem[]) => Promise<void>;
+  loading: boolean;
 }
 
 // Creating the context with undefined initial value
@@ -25,22 +26,24 @@ const GroceryContext = createContext<GroceryContextType | undefined>(undefined);
 
 export const GroceryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [groceryItems, setGroceryItems] = useState<GroceryItem[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     getStoreData<GroceryItem[]>(GROCERY_ITEMS_KEY).then(data => {
       if (data) {
         setGroceryItems(data);
       }
-    });
+    }).finally(() => setLoading(false));
   }, []);
 
   const saveGroceryItems = useCallback((items: GroceryItem[]) => {
     setGroceryItems(items);
-    storeData(GROCERY_ITEMS_KEY, items);
+    return storeData(GROCERY_ITEMS_KEY, items);
   }, []);
 
   return (
-    <GroceryContext.Provider value={{ groceryItems, saveGroceryItems }}>
+    <GroceryContext.Provider value={{ groceryItems, saveGroceryItems, loading }}>
       {children}
     </GroceryContext.Provider>
   );
