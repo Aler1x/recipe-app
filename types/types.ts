@@ -12,9 +12,11 @@ export type Recipe = {
 }
 
 export type RootStackParamList = {
-  Main: undefined;
+  Main: undefined | { screen: string };
   Recipe: { id: number };
   Login: undefined;
+  MyRecipes: undefined;
+  Statistics: undefined;
 };
 
 // for recipe screen

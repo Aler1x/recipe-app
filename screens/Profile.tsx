@@ -24,17 +24,30 @@ import BackgroundCircle from '../assets/Icons/backgroundCircle';
 import useFetch from '../hooks/useFetch';
 import { useState } from 'react';
 import PrimaryButton from '../components/PrimaryButton';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/types';
+
+type User = {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+};
 
 const Profile = () => {
   const { theme, isDark, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const styles = getStyles(theme);
 
-  const { data, error, loading } = useFetch<{
-    username: string;
-    email: string;
-  }>('/login/me');
+  const { data, error, loading } = useFetch<User>('/login/me');
+
+  if(data && !user) {
+    setUser(data);
+  }
 
   return (
     <View style={{ backgroundColor: theme.background, flex: 1 }}>
@@ -58,8 +71,8 @@ const Profile = () => {
                     <Text style={styles.userText}>{error.message}</Text>
                   ) : (
                     <>
-                      <Text style={styles.userText}>{data?.username}</Text>
-                      <Text style={styles.userText}>{data?.email}</Text>
+                      <Text style={styles.userText}>{user?.username}</Text>
+                      <Text style={styles.userText}>{user?.email}</Text>
                     </>
                   )}
                 </>
@@ -75,17 +88,9 @@ const Profile = () => {
           <ProfileButton
             text={'My Recipes'}
             onPress={() => {
-              console.log('My Recipes');
+              navigation.navigate('MyRecipes');
             }}
             Icon={RecipeIcon}
-          />
-
-          <ProfileButton
-            text={'Cooked'}
-            onPress={() => {
-              console.log('Cooked');
-            }}
-            Icon={BookmarkIcon}
           />
 
           <Pressable style={styles.statisticContainer}>
@@ -114,7 +119,7 @@ const Profile = () => {
             }}
             style={styles.modal}
           >
-            <View style={{ flex: 1, backgroundColor: theme.backdrop }}>
+            <Pressable style={{ flex: 1, backgroundColor: theme.backdrop }} onPress={() => setIsOpen(false)}>
               <View style={styles.modalContent}>
                 <Text style={{ fontSize: 18 }}>Contact developers</Text>
                 <View style={{ gap: 3 }}>
@@ -122,9 +127,8 @@ const Profile = () => {
                     <Text key={email} style={styles.userText}>{email}</Text>
                   ))}
                 </View>
-                <PrimaryButton onPress={() => setIsOpen(false)}>Close</PrimaryButton>
               </View>
-            </View>
+            </Pressable>
           </Modal>
         </View>
       </ScrollView>

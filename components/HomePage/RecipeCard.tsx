@@ -11,6 +11,8 @@ import { CalorieIcon, TimeIcon, HearthIcon, MoneyIcon } from '../../assets/Icons
 import { useTheme } from '../../store/themeContext';
 import { useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Theme } from '../../styles/theme';
+import { useFavesContext } from '../../store/favesContext';
 
 type RecipeCardProps = {
   recipe: Recipe;
@@ -21,81 +23,20 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
   const [isSaved, setIsSaved] = useState(recipe.isSaved ?? false);
   const { width } = Dimensions.get('window');
 
-  const toggleSaved = () => {
-    setIsSaved((prev) => !prev);
-  }
+  const { addFave, removeFave } = useFavesContext();
 
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: theme.background,
-      borderRadius: 16,
-      overflow: 'hidden',
-      alignSelf: 'center',
-      width: width * 0.8,
-      shadowColor: "rgba(0, 0, 0, 0.25)",
-      shadowOffset: {
-        width: 0,
-        height: 4
-      },
-      shadowRadius: 4,
-      shadowOpacity: 0.25,
-      elevation: 4,
-      marginBottom: 16,
-    },
-    background: {
-      width: '100%',
-      aspectRatio: 1,
-    },
-    gradient: {
-      height: '100%',
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      bottom: 0,
-      justifyContent: 'flex-end',
-    },
-    topContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      top: 16,
-      alignItems: 'center',
-      paddingHorizontal: 10,
-      zIndex: 1,
-    },
-    tagsContainer: {
-      flexDirection: 'row',
-      gap: 4,
-    },
-    tag: {
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      color: '#F3F3F3',
-      fontSize: 12,
-      letterSpacing: 3,
-      padding: 4,
-      borderRadius: 8,
-    },
-    bottomContainer: {
-      flexDirection: 'column',
-      justifyContent: 'space-around',
-      gap: 12,
-      paddingHorizontal: 16,
-      paddingBottom: 20,
-    },
-    title: {
-      color: '#F3F3F3',
-      fontSize: width * 0.05,
-      fontFamily: 'TurbotaBold',
-      alignSelf: 'center',
-      textAlign: 'center',
-    },
-    infoContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-    },
-    infoBlock: {
-      alignItems: 'center',
-    },
-  });
+  const toggleSaved = () => {
+    setIsSaved(prev => !prev);
+    if (recipe.isSaved === false) {
+      addFave(recipe.id);
+      recipe.isSaved = true;
+    } else {
+      removeFave(recipe.id);
+      recipe.isSaved = false;
+    }
+  };
+
+  const styles = getStyles(theme, width);
 
   return (
     <View style={styles.container}>
@@ -153,3 +94,75 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
 };
 
 export default RecipeCard;
+
+const getStyles = (theme: Theme, width: number) => StyleSheet.create({
+  container: {
+    backgroundColor: theme.background,
+    borderRadius: 16,
+    overflow: 'hidden',
+    alignSelf: 'center',
+    width: width * 0.8,
+    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowRadius: 4,
+    shadowOpacity: 0.25,
+    elevation: 4,
+    marginBottom: 16,
+  },
+  background: {
+    width: '100%',
+    aspectRatio: 1,
+  },
+  gradient: {
+    height: '100%',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+  },
+  topContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    top: 16,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    zIndex: 1,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  tag: {
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    color: '#F3F3F3',
+    fontSize: 12,
+    letterSpacing: 3,
+    padding: 4,
+    borderRadius: 8,
+  },
+  bottomContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+  },
+  title: {
+    color: '#F3F3F3',
+    fontSize: width * 0.05,
+    fontFamily: 'TurbotaBold',
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  infoBlock: {
+    alignItems: 'center',
+  },
+});

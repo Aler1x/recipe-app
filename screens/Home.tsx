@@ -17,6 +17,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/types';
 import { RefreshControl } from 'react-native-gesture-handler';
+import { useFavesContext } from '../store/favesContext';
+import { useEffect } from 'react';
 
 const Home = () => {
   const { theme } = useTheme();
@@ -57,6 +59,8 @@ const Home = () => {
     refetch,
   } = usePaginated<Recipe[]>('/recipes', 10);
 
+  const { faves } = useFavesContext();
+
   if (error) {
     return (
       <View style={[styles.centered, styles.background]}>
@@ -69,9 +73,21 @@ const Home = () => {
     navigation.navigate('Recipe', { id });
   };
 
+  useEffect(() => {
+    if (recipes && faves) {
+      recipes.forEach(recipe => {
+        if (faves.includes(recipe.id)) {
+          recipe.isSaved = true;
+        } else {
+          recipe.isSaved = false;
+        }
+      });
+    }
+  }, [faves, recipes]);
+
   return (
     <View style={styles.background}>
-      <SearchBar style={{ zIndex: 2 }} includeCuisines />
+      <SearchBar style={{ zIndex: 2 }} includeCuisines search={() => { }} />
       <FlatList
         data={recipes}
         renderItem={({ item }) => (

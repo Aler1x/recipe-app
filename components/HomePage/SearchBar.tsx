@@ -20,9 +20,10 @@ import { Theme } from '../../styles/theme';
 type SearchBarProps = {
   style?: StyleProp<ViewStyle>;
   includeCuisines?: boolean;
+  search: (text: string) => void; 
 };
 
-const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
+const SearchBar = ({ style, includeCuisines = false, search }: SearchBarProps) => {
   const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<number[]>([]);
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
@@ -78,10 +79,6 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
     }
   }
 
-  const onInput = (text: string) => {
-    console.log('onInput', text);
-  };
-
   return (
     <>
       <View style={styles.bar}>
@@ -96,7 +93,7 @@ const SearchBar = ({ style, includeCuisines = false }: SearchBarProps) => {
             paddingHorizontal: 12,
           }}
           placeholderTextColor='#181818'
-          onChangeText={onInput}
+          onChangeText={search}
         />
         {includeCuisines && (
           <Pressable onPress={() => toggleFilter()}>
@@ -184,14 +181,6 @@ const getStyles = (theme: Theme, style: StyleProp<ViewStyle>) =>
       ...{ style },
       zIndex: 1,
     },
-    // dropContainer: {
-    //   position: 'absolute',
-    //   backgroundColor: theme.background,
-    //   zIndex: 10,
-    //   left: 0,
-    //   right: 0,
-    //   top: 70
-    // },
     categoryName: {
       borderRadius: 100,
       paddingHorizontal: 12,

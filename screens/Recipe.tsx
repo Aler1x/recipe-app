@@ -26,6 +26,7 @@ import { useState } from 'react';
 import { getStoreData } from '../store/asyncStore';
 import { GROCERY_ITEMS_KEY, GroceryItem, useGroceryContext } from '../store/groceryItemsContext';
 import PRODUCT_TO_EMOJI from '../store/productToEmoji';
+import { useFavesContext } from '../store/favesContext';
 
 const Recipe = () => {
   const { theme } = useTheme();
@@ -53,6 +54,8 @@ const Recipe = () => {
     error,
   } = useFetch<RecipeFull>(`/recipes/${id}`);
 
+  const { faves, addFave, removeFave } = useFavesContext();
+
   if (loading) {
     return (
       <View style={styles.background}>
@@ -75,6 +78,24 @@ const Recipe = () => {
         <Text>Recipe not found</Text>
       </View>
     );
+  }
+
+  if(recipe && faves) {
+    if(faves.includes(recipe.id)){
+      recipe.isSaved = true;
+    } else {
+      recipe.isSaved = false;
+    }
+  }
+
+  const handleSave = () => {
+    if (recipe.isSaved === false) {
+      addFave(recipe.id);
+      recipe.isSaved = true;
+    } else {
+      removeFave(recipe.id);
+      recipe.isSaved = false;
+    }
   }
 
   const saveIngredientToGroceryList = (ingredient: Ingredient) => {
@@ -116,9 +137,9 @@ const Recipe = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.topButtons}
-            onPress={() => console.log('liked!!!')}
+            onPress={() => handleSave()}
           >
-            <LikeIcon color={theme.text} />
+            <LikeIcon color={theme.text} filled={recipe.isSaved} />
           </TouchableOpacity>
         </View>
         <View style={styles.mainInfoContainer}>

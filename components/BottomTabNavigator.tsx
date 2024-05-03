@@ -74,7 +74,7 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen name="Add" component={Add}
+      <Tab.Screen name="AddRecipe" component={Add}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={focused ? styles.activeIcon : {}}>

@@ -5,6 +5,8 @@ import {
   TextInput,
   Dimensions,
   Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
@@ -14,6 +16,7 @@ import { RootStackParamList } from '../types/types';
 import PrimaryButton from '../components/PrimaryButton';
 import { getStoreData, storeData } from '../store/asyncStore';
 import { API_URL } from '../constants';
+import { Theme } from '../styles/theme';
 
 const Login = () => {
   const { theme } = useTheme();
@@ -46,41 +49,7 @@ const Login = () => {
     });
   }, []);
 
-  const styles = StyleSheet.create({
-    background: {
-      backgroundColor: theme.background,
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    title: {
-      fontFamily: 'TurbotaBold',
-      fontSize: 20,
-      position: 'absolute',
-      top: 40,
-      left: 20,
-    },
-    inputField: {
-      backgroundColor: theme.background,
-      width: Dimensions.get('window').width * 0.8,
-      height: Dimensions.get('window').height * 0.07,
-      marginBottom: 20,
-      borderRadius: 16,
-      alignSelf: 'center',
-      padding: 10,
-      color: theme.text,
-      borderColor: theme.text,
-      borderWidth: 1,
-    },
-    buttonStyle: {
-      width: Dimensions.get('window').width * 0.8,
-      alignSelf: 'center',
-    },
-    signInShitTapper: {
-      marginTop: 20,
-      alignItems: 'center',
-    },
-  });
+  const styles = geStyles(theme);
 
   const handleLogin = async () => {
     try {
@@ -90,8 +59,8 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: email,
-          password: password,
+          email: email.trim(),
+          password: password.trim(),
         }),
       });
 
@@ -116,9 +85,9 @@ const Login = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: email,
-          username: username,
-          password: password,
+          email: email.trim(),
+          username: username.trim(),
+          password: password.trim(),
         }),
       });
       const data = await response.json();
@@ -136,9 +105,15 @@ const Login = () => {
   };
 
   return (
-    <View style={styles.background}>
+    <KeyboardAvoidingView style={styles.background}>
       <Text style={styles.title}>Hi 👋‍️‍</Text>
-      <View>
+      <ScrollView
+        contentContainerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          top: "25%"
+        }}
+      >
         {isSignIn && (
           <TextInput
             placeholder="Username"
@@ -174,9 +149,45 @@ const Login = () => {
             {isSignIn ? 'Login' : 'Create account'}
           </Text>
         </Pressable>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default Login;
+
+const geStyles = (theme: Theme) => StyleSheet.create({
+  background: {
+    backgroundColor: theme.background,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontFamily: 'TurbotaBold',
+    fontSize: 20,
+    position: 'absolute',
+    top: 40,
+    left: 20,
+  },
+  inputField: {
+    backgroundColor: theme.background,
+    width: Dimensions.get('window').width * 0.8,
+    height: Dimensions.get('window').height * 0.07,
+    marginBottom: 20,
+    borderRadius: 16,
+    alignSelf: 'center',
+    padding: 10,
+    color: theme.text,
+    borderColor: theme.text,
+    borderWidth: 1,
+  },
+  buttonStyle: {
+    width: Dimensions.get('window').width * 0.8,
+    alignSelf: 'center',
+  },
+  signInShitTapper: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+});
