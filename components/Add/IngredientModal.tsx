@@ -1,24 +1,25 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { Dimensions, FlatList, Keyboard, Modal, StyleProp, TextInput, TextStyle, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import { Dimensions, FlatList, Keyboard, Modal, StyleProp, TextInput, TextStyle, TouchableOpacity, TouchableWithoutFeedback, View, StyleSheet, Pressable } from 'react-native';
 import PrimaryButton from '../PrimaryButton';
 import { useTheme } from '../../store/themeContext';
 import Text from '../Text';
 import { UseFormGetValues, UseFormSetValue, set } from 'react-hook-form';
-import { FormValues } from '../../screens/Add';
+import { FormIngredient, FormValues } from '../../screens/Add';
 import useFetch from '../../hooks/useFetch';
 import { Product, Unit } from '../../types/types';
-// import Autocomplete from 'react-native-autocomplete-input';
 import { Theme } from '../../styles/theme';
 import { debounce } from '../../utils/debounce';
 
 type OwnProps = {
   modalVisible: boolean;
   setModalVisible: (visible: boolean) => void;
-  addIngredient: (name: string, amount: number, unit: string) => void;
+  addIngredient: (id: number | undefined, name: string, amount: number, unit: number, unitName?: string) => void;
   setValue: UseFormSetValue<FormValues>;
   getValues: UseFormGetValues<FormValues>;
-  styles: { input: StyleProp<TextStyle>; title: StyleProp<TextStyle> };
+  styles: { input: StyleProp<TextStyle>; title: StyleProp<TextStyle>, errorText: StyleProp<TextStyle> };
 };
+
+type TempFormErrors = Partial<Record<keyof FormIngredient, { description: string }>>; 
 
 const IngredientModal = ({
   modalVisible,
@@ -30,9 +31,12 @@ const IngredientModal = ({
 }: OwnProps) => {
   const { theme } = useTheme();
   const [productInput, setProductInput] = useState("");
+  const [unitInput, setUnitInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("avocado");
-  const [listVisible, setListVisible] = useState(false);
-  const inputRef = useRef<TextInput>(null);
+  const [productsListVisible, setProductsListVisible] = useState(false);
+  const [unitsListVisible, setUnitsListVisible] = useState(false);
+  const productsInputRef = useRef<TextInput>(null);
+  const [errors, setErrors] = useState<TempFormErrors>({});
 
   const searchEndpoint = useMemo(() => "/products/search?searchTerm=" + searchTerm, [searchTerm]);
   const { data: products, loading: loadingProducts } = useFetch<Product[]>(searchEndpoint);
@@ -45,8 +49,15 @@ const IngredientModal = ({
     setValue('tempIngredient.name', product.name);
     setValue('tempIngredient.id', product.id);
     setProductInput(product.name);
-    setListVisible(false);
-    inputRef.current?.blur();
+    setProductsListVisible(false);
+    productsInputRef.current?.blur();
+  };
+
+  const selectUnit = (unit: Unit) => {
+    setValue('tempIngredient.unitId', unit.id);
+    setValue('tempIngredient.unitName', unit.name);
+    setUnitInput(unit.name);
+    setUnitsListVisible(false);
   };
 
   const debouncedSearchTerm = useCallback(debounce((text: string) => {
@@ -91,23 +102,29 @@ const IngredientModal = ({
               <View style={{ width: "100%", marginBottom: 12 }}>
                 <Text style={{ marginBottom: 12 }}>What?</Text>
                 <TextInput
-                  ref={inputRef}
+                  ref={productsInputRef}
                   placeholder="Choose product"
+                  placeholderTextColor={theme.placeholder}
                   value={productInput}
                   onChangeText={(text) => {
                     setProductInput(text);
                     debouncedSearchTerm(text)
                   }}
                   style={[styles.input, { borderColor: theme.placeholder }]}
-                  onFocus={() => setListVisible(true)}  
+                  onFocus={() => setProductsListVisible(true)}  
                   
                   onBlur={() => {
                     setTimeout(() => {
-                      setListVisible(false);
+                      setProductsListVisible(false);
                     }, 100);
                   }}
                 />
-                {listVisible && !loadingProducts && searchTerm && (
+                {
+                  errors?.name && (
+                    <Text style={styles.errorText}>{errors.name.description}</Text>
+                  )
+                }
+                {productsListVisible && !loadingProducts && searchTerm && (
                   <FlatList
                     keyboardShouldPersistTaps="always"
                     data={products}
@@ -135,22 +152,87 @@ const IngredientModal = ({
                     keyboardType="numeric"
                     style={[styles.input, { flex: 1 }]}
                   />
-                  <TextInput
-                    placeholder="Unit"
-                    placeholderTextColor={theme.placeholder}
-                    onChangeText={text => setValue('tempIngredient.unit', text)}
-                    style={[styles.input, { minWidth: Dimensions.get('window').width * 0.22 }]}
-                  />
+                  <Pressable onPress={() => setUnitsListVisible(true)}>
+                    <TextInput
+                      placeholder="Unit"
+                      placeholderTextColor={theme.placeholder}
+                      style={[styles.input, { minWidth: Dimensions.get('window').width * 0.22 }]}
+                      editable={false}
+                      value={unitInput}
+                      onFocus={() => setUnitsListVisible(true)}
+                      onPressOut={() => setUnitsListVisible(true)}
+                    />
+                  </Pressable>
+                  {unitsListVisible && !loadingUnits && (
+                    <FlatList
+                      keyboardShouldPersistTaps="always"
+                      style={innerStyles.list}
+                      data={units}
+                      keyExtractor={(item) => item.id.toString()}
+                      renderItem={({ item }) => (
+                        <Pressable onPress={() => selectUnit(item)} style={innerStyles.item}>
+                          <Text>{item.name}</Text>
+                        </Pressable>
+                      )}
+                    />
+                  )}
                 </View>
               </View>
+              {errors?.unitId && (
+                <Text style={styles.errorText}>{errors.unitId.description}</Text>
+              )}
+              {errors?.amount && (
+                <Text style={styles.errorText}>{errors.amount.description}</Text>
+              )}
               <PrimaryButton
-                onPress={() =>
+                onPress={() => {
+                  setErrors({});
+                  const id = getValues('tempIngredient.id');
+                  const name = getValues('tempIngredient.name');
+                  const amount = getValues('tempIngredient.amount');
+                  const unitId = getValues('tempIngredient.unitId');
+                  const unitName = getValues('tempIngredient.unitName');
+                  if (!name) {
+                    setErrors(errors => ({
+                      ...errors,
+                      name: { description: "Name is required" }
+                    }));
+                  }
+
+                  if (!amount) {
+                    setErrors(errors => ({
+                      ...errors,
+                      amount: { description: "Amount is required" }
+                    }));
+                  }
+
+                  if (!unitId) {
+                    setErrors(errors => ({
+                      ...errors,
+                      unitId: { description: "Unit is required" }
+                    }));
+                  }
+
+                  if (!name || !amount || !unitId) {
+                    return;
+                  }
+
                   addIngredient(
-                    getValues('tempIngredient.name'),
-                    getValues('tempIngredient.amount'),
-                    getValues('tempIngredient.unit'),
-                  )
-                }
+                    id,
+                    name,
+                    amount,
+                    unitId,
+                    unitName
+                  );
+                  setUnitInput("");
+                  setProductInput("");
+
+                  setValue('tempIngredient.name', "");
+                  setValue('tempIngredient.id', undefined);
+                  setValue('tempIngredient.amount', 0);
+                  setValue('tempIngredient.unitId', 0);
+                  setValue('tempIngredient.unitName', undefined);
+                }}
                 style={{ marginTop: 10, width: "100%" }}
               >Add</PrimaryButton>
             </View>
@@ -182,5 +264,5 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
     backgroundColor: theme.modalBg,
-  }
+  },
 });

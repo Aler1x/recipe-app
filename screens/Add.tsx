@@ -18,9 +18,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import PrimaryButton from '../components/PrimaryButton';
 import TextFormField from '../components/TextFormField';
 import { Fragment, useState } from 'react';
-import { ClearIcon } from '../assets/Icons';
-import { STEP_CIRCLE_SIZE } from '../constants';
+import { ClearIcon, DoneIcon, ErrorIcon } from '../assets/Icons';
+import { API_URL, STEP_CIRCLE_SIZE } from '../constants';
 import IngredientModal from '../components/Add/IngredientModal';
+import { getStoreData } from '../store/asyncStore';
+import MessageAlert from '../components/MessageAlert';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types/types';
 
 const validationSchema = yup.object().shape({
   caption: yup.string().required('Caption is required'),
@@ -36,11 +41,11 @@ const validationSchema = yup.object().shape({
           .number()
           .positive('Amount must be positive')
           .required('Amount is required'),
-        unit: yup.string().required('Unit is required'),
+        unitId: yup.number().required('Unit is required'),
+        unitName: yup.string(),
       }),
     )
     .required('At least one ingredient is required'),
-  // tempIngredient: yup.,
   steps: yup.array().required().of(
     yup.object().shape({
       description: yup.string().required('Step description is required'),
@@ -48,29 +53,52 @@ const validationSchema = yup.object().shape({
   ),
 });
 
-interface Ingredient {
+export type FormIngredient = {
   name: string;
   id?: number;
   amount: number;
-  unit: string;
+  unitId: number;
+  unitName?: string;
 }
 
 export type FormValues = {
   caption: string;
   time: string;
   nutrition: string;
-  ingredients: Ingredient[];
-  tempIngredient?: Ingredient;
+  ingredients: FormIngredient[];
+  tempIngredient?: FormIngredient;
   steps: { description: string }[];
+};
+
+type AlertState = {
+  message: string;
+  status: 'success' | 'failed';
+  createdId?: number;
 };
 
 const Add = () => {
   const { theme } = useTheme();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const styles = getStyles(theme);
   const [modalVisible, setModalVisible] = useState(false);
+  const [alert, setAlert] = useState<AlertState>();
 
-  const { control, handleSubmit, setValue, getValues, formState: { errors } } = useForm<FormValues>({
+  const { control, handleSubmit, reset, setValue, getValues, formState: { errors } } = useForm<FormValues>({
     resolver: yupResolver(validationSchema),
+    defaultValues: {
+      caption: '',
+      time: '',
+      nutrition: '',
+      tempIngredient: {
+        name: '',
+        id: undefined,
+        amount: undefined,
+        unitId: undefined,
+        unitName: undefined,
+      },
+      steps: [],
+      ingredients: [],
+    }
   });
 
   console.log(errors);
@@ -85,12 +113,58 @@ const Add = () => {
     name: 'steps',
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log(data);
+    const transformed = {
+      title: data.caption,
+      time: data.time,
+      nutrition: data.nutrition,
+      price: 0,
+      categories: [],
+      products: data.ingredients.map((ingredient) => ({
+        customName: ingredient.name,
+        productId: ingredient.id,
+        amount: ingredient.amount,
+        unitId: ingredient.unitId,
+      })),
+      servings: 1,
+      steps: data.steps.map((step) => step.description),
+    };
+  
+    const token = await getStoreData('jwtToken');
+    fetch(`${API_URL}/recipes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      
+      body: JSON.stringify(transformed),
+    }).then(response => {
+      if (response.ok) {
+        console.log('Recipe created');
+      } else {
+        console.error('Recipe creation failed', response.status);
+      }
+      return response.json();
+    }).then(data => {
+      reset();
+      setAlert({
+        message: 'Recipe created successfully',
+        status: 'success',
+        createdId: data.id,
+      });
+    }).catch(error => {
+      console.error('Recipe creation error:', error);
+      setAlert({
+        message: 'Recipe creation failed',
+        status: 'failed',
+      });
+    });
   };
 
-  const addIngredient = (name: string, amount: number, unit: string) => {
-    append({ name, amount, unit, id: 1 });
+  const addIngredient = (id: number | undefined, name: string, amount: number, unit: number, unitName?: string) => {
+    append({ name, amount, unitId: unit, id, unitName });
     setModalVisible(false);
   };
 
@@ -132,10 +206,11 @@ const Add = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 marginBottom: 10,
+                paddingVertical: 4,
               }}
             >
-              <Text>{`${field.name}, ${field.amount}${field.unit}`}</Text>
-              <Pressable onPress={() => remove(index)}>
+              <Text>{`${field.name}, ${field.amount} ${field.unitName}`}</Text>
+              <Pressable onPress={() => remove(index)} style={{ padding: 6 }}>
                 <ClearIcon color={theme.text} />
               </Pressable>
             </View>
@@ -147,7 +222,7 @@ const Add = () => {
           </Pressable>
           <Text style={styles.label}>Steps</Text>
           <View style={styles.stepsContainer}>
-            {stepFields.map((field, index) => (
+            {stepFields.map((_, index) => (
               <Fragment key={index}>
                 <View style={styles.step}>
                   <View
@@ -169,7 +244,7 @@ const Add = () => {
                       style={styles.input}
                     />
                     {errors.steps && errors.steps[index] && (
-                      <Text style={{ color: 'red' }}>
+                      <Text style={styles.errorText}>
                         {errors.steps[index]?.description?.message}
                       </Text>
                     )}
@@ -199,6 +274,19 @@ const Add = () => {
         styles={styles}
       />
       <BackgroundCircle color={theme.bgCircle} style={styles.circle} />
+      {alert && (
+        <MessageAlert timeout={8000} onClose={() => setAlert(undefined)}>
+          <Pressable onPress={() => alert.status === 'success' && navigation.navigate('Recipe', { id: alert.createdId! })}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 6 }}>
+              {alert.status === 'success' ? <DoneIcon color={theme.stepDone} /> : <ErrorIcon color={theme.error}  /> }
+              <Text style={{ fontSize: 16, color: theme.foreground }}>{alert.message}</Text>
+              {alert.status === 'success' && 
+                <Text style={{ color: theme.stepDone, marginLeft: 8, fontSize: 20, fontFamily: 'TurbotaBold' }}>View</Text>
+              }
+            </View>
+          </Pressable>
+        </MessageAlert>
+      )}
     </KeyboardAvoidingView>
   );
 };
@@ -277,5 +365,8 @@ const getStyles = (theme: Theme) =>
     submit: {
       marginTop: 20,
       marginBottom: Dimensions.get('window').height * 0.05,
+    },
+    errorText: {
+      color: theme.error,
     },
   });

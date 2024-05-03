@@ -38,10 +38,8 @@ const Profile = () => {
   return (
     <View style={{ backgroundColor: theme.background, flex: 1 }}>
       <BackgroundCircle style={{ top: Dimensions.get('window').height * 0.4, left: 0 }} />
-      <ScrollView style={{ paddingHorizontal: 15 }}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Your Profile 😊</Text>
-        </View>
+      <ScrollView style={styles.container}>
+        <Text style={styles.title}>Your Profile 😊</Text>
         <View style={styles.topContainer}>
           <View style={styles.userContainer}>
             <View style={styles.userIcon}>
@@ -132,13 +130,16 @@ export default Profile;
 
 const getStyles = (theme: Theme) =>
   StyleSheet.create({
-    header: {
-      marginVertical: Dimensions.get('window').height * 0.02,
-      marginHorizontal: 5,
-    },
     title: {
-      fontSize: Dimensions.get('window').width * 0.06,
+      fontSize: 21,
+      marginBottom: Dimensions.get('window').height * 0.01,
       fontFamily: 'TurbotaBold',
+    },
+    container: {
+      paddingVertical: Dimensions.get('window').height * 0.05,
+      maxWidth: 500,
+      width: '100%',
+      paddingHorizontal: Dimensions.get('window').width * 0.08,
     },
     topContainer: {
       flexDirection: 'row',

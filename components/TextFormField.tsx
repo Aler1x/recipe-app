@@ -60,7 +60,7 @@ const getStyles = (theme: Theme) => ({
     fontFamily: 'TurbotaBold',
   },
   errorText: {
-    color: 'red',
+    color: theme.error,
     marginBottom: 5,
   },
   fieldContainer: {

@@ -30,6 +30,7 @@ export type Theme = {
   generalShadow: string;
   categoryCardShadow: string;
   recipeImageInnerShadow: string;
+  error: string;
 };
 
 const commonTheme = {
@@ -53,6 +54,7 @@ export const lightTheme: Theme = {
   stepUndone: '#E2E2E2',
   recipeImageInnerShadow: 'rgba(255,255,255,0.65)',
   userIcon: '#F3F3F3',
+  error: '#FF8B8B',
 
   ...commonTheme,
 };
@@ -72,6 +74,7 @@ export const darkTheme: Theme = {
   stepUndone: '#6B6B6B',
   recipeImageInnerShadow: 'rgba(18,18,18, 0.65)',
   userIcon: '#303030',
+  error: '#EB5F5F',
 
   ...commonTheme,
 };
