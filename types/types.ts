@@ -11,12 +11,19 @@ export type Recipe = {
   servings: number;
 }
 
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  role: string;
+};
+
 export type RootStackParamList = {
   Main: undefined | { screen: string };
   Recipe: { id: number };
   Login: undefined;
   MyRecipes: undefined;
-  Statistics: undefined;
+  Statistics: { user: User };
 };
 
 // for recipe screen

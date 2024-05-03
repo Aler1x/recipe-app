@@ -11,7 +11,6 @@ import { useTheme } from '../store/themeContext';
 import Text from '../components/Text';
 import { Theme } from '../styles/theme';
 import {
-  BookmarkIcon,
   CatIcon,
   MailIcon,
   MoonIcon,
@@ -23,31 +22,18 @@ import ProfileButton from '../components/Profile/ProfileButton';
 import BackgroundCircle from '../assets/Icons/backgroundCircle';
 import useFetch from '../hooks/useFetch';
 import { useState } from 'react';
-import PrimaryButton from '../components/PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types/types';
-
-type User = {
-  id: number;
-  username: string;
-  email: string;
-  role: string;
-};
+import { RootStackParamList, User } from '../types/types';
 
 const Profile = () => {
   const { theme, isDark, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const styles = getStyles(theme);
 
   const { data, error, loading } = useFetch<User>('/login/me');
-
-  if(data && !user) {
-    setUser(data);
-  }
 
   return (
     <View style={{ backgroundColor: theme.background, flex: 1 }}>
@@ -71,8 +57,8 @@ const Profile = () => {
                     <Text style={styles.userText}>{error.message}</Text>
                   ) : (
                     <>
-                      <Text style={styles.userText}>{user?.username}</Text>
-                      <Text style={styles.userText}>{user?.email}</Text>
+                      <Text style={styles.userText}>{data?.username}</Text>
+                      <Text style={styles.userText}>{data?.email}</Text>
                     </>
                   )}
                 </>
@@ -93,7 +79,14 @@ const Profile = () => {
             Icon={RecipeIcon}
           />
 
-          <Pressable style={styles.statisticContainer}>
+          <Pressable style={styles.statisticContainer} onPress={
+            () => {
+              if (data)
+                navigation.navigate('Statistics', {
+                  user: data,
+                });
+            }
+          }>
             <View style={{ flexDirection: 'row' }}>
               <StatisticIcon style={styles.statisticIcon} color={theme.foreground} />
               <Text style={styles.statisticText}>Statistics</Text>

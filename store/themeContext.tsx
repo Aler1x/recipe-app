@@ -25,26 +25,33 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState(isDark ? darkTheme : lightTheme);
 
   useEffect(() => {
-    const get = async () => {
-      return (await getStoreData('isDark')) === 'dark' ? 'dark' : 'light';
-    };
-
-    const isDark = colorScheme === 'dark' || (async () => (await get() === 'dark'));
-    setTheme(isDark ? darkTheme : lightTheme);
-    // @ts-ignore
-    setIsDark(isDark);
+    getStoreData('isDark').then((value) => {
+      console.log('value', value);
+      const isDark = colorScheme === 'dark';
+      if (value === 'dark' || isDark) {
+        setIsDark(true);
+        setTheme(darkTheme);
+      } else {
+        setIsDark(false);
+        setTheme(lightTheme);
+      }
+    });
   }, [colorScheme]);
 
 
   const toggleTheme = useCallback(() => {
-    setIsDark((wasDark) => {
-      const save = async () => {
-        await storeData('theme', !wasDark ? 'dark' : 'light');
-      };
-      save();
-      const newIsDark = !wasDark;
-      setTheme(newIsDark ? darkTheme : lightTheme);
-      return newIsDark;
+    storeData('isDark', isDark ? 'light' : 'dark').then(() => {
+      getStoreData('isDark').then((value) => {
+        console.log('value', value);
+        console.log('isDark', isDark);
+        if (value === 'dark') {
+          setIsDark(true);
+          setTheme(darkTheme);
+        } else {
+          setIsDark(false);
+          setTheme(lightTheme);
+        }
+      });
     });
   }, []);
 

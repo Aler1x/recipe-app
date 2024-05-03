@@ -11,6 +11,7 @@ import { GroceryProvider } from './store/groceryItemsContext';
 import StatusBarHandler from './components/StatusBarHandler';
 import MyRecipes from './screens/MyRecipes';
 import { FavesProvider } from './store/favesContext';
+import Statistic from './screens/Statistic';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -44,7 +45,7 @@ export default function App() {
                 <Stack.Screen name="Main" component={BottomTabNavigator} />
                 <Stack.Screen name="Recipe" component={Recipe} />
                 <Stack.Screen name="MyRecipes" component={MyRecipes} />
-                <Stack.Screen name="Statistics" component={MyRecipes} />
+                <Stack.Screen name="Statistics" component={Statistic} />
               </Stack.Navigator>
             </SafeAreaView>
           </GroceryProvider>
