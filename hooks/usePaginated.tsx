@@ -5,6 +5,7 @@ import { getStoreData } from '../store/asyncStore';
 function usePaginated<T extends any[]>(
   endpoint: string,
   size: number = 10,
+  query: string[] = [''],
 ): {
   data: T | null;
   loading: boolean;
@@ -28,7 +29,7 @@ function usePaginated<T extends any[]>(
 
   useEffect(() => {
     setLoading(true);
-    const url = `${API_URL}${endpoint}?page=${page}&size=${size}`;
+    const url = `${API_URL}${endpoint}?page=${page}&size=${size}` + (query ? `&categories=${query.join(',')}` : '');
     console.log(url);
     getStoreData('jwtToken').then(token => {
       fetch(url, {
@@ -65,7 +66,7 @@ function usePaginated<T extends any[]>(
           setLoading(false);
         });
     });
-  }, [endpoint, page]);
+  }, [endpoint, page, size, query]);
 
   return { data, loading, error, fetchMore, refetch };
 }

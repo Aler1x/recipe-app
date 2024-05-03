@@ -24,8 +24,7 @@ function useFetch<T>(endpoint: string): {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-      })
-        .then(response => {
+      }).then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }

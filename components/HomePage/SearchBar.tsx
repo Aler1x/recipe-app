@@ -12,7 +12,7 @@ import { FilterIcon, SearchIcon } from '../../assets/Icons';
 import { useTheme } from '../../store/themeContext';
 import Text from '../Text';
 import Category from './Category';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { Category as CategoryType } from '../../types/types';
 import { Theme } from '../../styles/theme';
@@ -20,64 +20,53 @@ import { Theme } from '../../styles/theme';
 type SearchBarProps = {
   style?: StyleProp<ViewStyle>;
   includeCuisines?: boolean;
-  search: (text: string) => void; 
+  search: (text: string) => void;
 };
 
 const SearchBar = ({ style, includeCuisines = false, search }: SearchBarProps) => {
   const { theme } = useTheme();
-  const [activeCategory, setActiveCategory] = useState<number[]>([]);
-  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  // const [activeCategory, setActiveCategory] = useState<number[]>([]);
+  // const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
 
-  const toggleCategory = (id: number) => {
-    setActiveCategory(prev => {
-      if (prev.includes(id)) {
-        return prev.filter(categoryId => categoryId !== id);
-      }
-      return [...prev, id];
-    });
-  };
+  // const isActive = (id: number) => {
+  //   return activeCategory.includes(id);
+  // };
 
-  const isActive = (id: number) => {
-    return activeCategory.includes(id);
-  };
-
-  const toggleFilter = () => {
-    console.log('toggleFilter');
-    setIsFilterOpen(prev => !prev);
-  };
+  // const toggleFilter = () => {
+  //   console.log('toggleFilter');
+  //   setIsFilterOpen(prev => !prev);
+  // };
 
   const styles = getStyles(theme, style);
 
-  let categories: CategoryType[] = [];
+  // let categories: CategoryType[] | undefined = undefined;
 
-  if (includeCuisines) {
-    const {
-      data,
-      loading,
-      error,
-    } = useFetch<CategoryType[]>('/categories');
+  // if (includeCuisines) {
+  //   const {
+  //     data,
+  //     loading,
+  //     error,
+  //   } = useFetch<CategoryType[]>('/categories/important');
 
-    if (loading) {
-      return (
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color={theme.text} />
-        </View>
-      );
-    }
+  //   if (loading) {
+  //     return (
+  //       <View style={styles.centered}>
+  //         <ActivityIndicator size="large" color={theme.text} />
+  //       </View>
+  //     );
+  //   }
 
-    if (error) {
-      console.error('Error loading categories: ', error);
-      return (
-        <View style={styles.centered}>
-          <Text>Error: ${error.message}</Text>
-        </View>
-      );
-    }
+  //   if (error) {
+  //     console.error('Error loading categories: ', error);
+  //     return (
+  //       <View style={styles.centered}>
+  //         <Text>Error: ${error.message}</Text>
+  //       </View>
+  //     );
+  //   }
 
-    if (data) {
-      categories = data;
-    }
-  }
+  //   categories = data ?? [];
+  // }
 
   return (
     <>
@@ -95,13 +84,13 @@ const SearchBar = ({ style, includeCuisines = false, search }: SearchBarProps) =
           placeholderTextColor='#181818'
           onChangeText={search}
         />
-        {includeCuisines && (
+        {/* {includeCuisines && (
           <Pressable onPress={() => toggleFilter()}>
             <FilterIcon />
           </Pressable>
-        )}
+        )} */}
       </View>
-      {isFilterOpen && categories && (
+      {/* {isFilterOpen && categories && (
         <View>
           <ScrollView
             horizontal
@@ -131,7 +120,7 @@ const SearchBar = ({ style, includeCuisines = false, search }: SearchBarProps) =
                 </Pressable>
               ))}
           </ScrollView>
-          {includeCuisines && (
+      {false && (
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -149,8 +138,8 @@ const SearchBar = ({ style, includeCuisines = false, search }: SearchBarProps) =
                 ))}
             </ScrollView>
           )}
-        </View>
-      )}
+      </View>
+      )} */}
     </>
   );
 };

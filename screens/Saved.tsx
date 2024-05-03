@@ -17,8 +17,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/types';
 import { Theme } from '../styles/theme';
 import useFetch from '../hooks/useFetch';
-import { useEffect, useState } from 'react';
-import { useFavesContext } from '../store/favesContext';
+import { useState } from 'react';
 
 const Saved = () => {
   const { theme } = useTheme();
@@ -30,8 +29,6 @@ const Saved = () => {
     name: string;
     recipes: Recipe[];
   }>('/user/lists/faves');
-
-  const { faves } = useFavesContext();
 
   const styles = getStyles(theme);
 
@@ -47,14 +44,7 @@ const Saved = () => {
     navigation.navigate('Recipe', { id });
   };
 
-  if (data) {
-    data.recipes.forEach(recipe => {
-      recipe.isSaved = true;
-    });
-  }
-
   const searchRecipes = (searchText: string) => {
-    console.log('searching', searchText);
     if (!data) return;
     const filtered =
       searchText.length === 0
@@ -83,7 +73,11 @@ const Saved = () => {
           </Text>
         }
         refreshControl={
-          <RefreshControl refreshing={!data} onRefresh={refetch} />
+          <RefreshControl refreshing={!data} onRefresh={() => {
+            refetch();
+            setFilteredRecipes([]);
+          }}
+          />
         }
         style={styles.recipesContainer}
         windowSize={15}

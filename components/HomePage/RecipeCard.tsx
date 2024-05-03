@@ -9,7 +9,7 @@ import {
 import Text from '../Text';
 import { CalorieIcon, TimeIcon, HearthIcon, MoneyIcon } from '../../assets/Icons';
 import { useTheme } from '../../store/themeContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Theme } from '../../styles/theme';
 import { useFavesContext } from '../../store/favesContext';
@@ -20,10 +20,13 @@ type RecipeCardProps = {
 
 const RecipeCard = ({ recipe }: RecipeCardProps) => {
   const { theme } = useTheme();
-  const [isSaved, setIsSaved] = useState(recipe.isSaved ?? false);
+  const { addFave, removeFave, faves } = useFavesContext();
+  const [isSaved, setIsSaved] = useState(recipe.isSaved ?? faves.includes(recipe.id));
   const { width } = Dimensions.get('window');
 
-  const { addFave, removeFave } = useFavesContext();
+  useEffect(() => {
+    setIsSaved(faves.includes(recipe.id));
+  }, [faves]);
 
   const toggleSaved = () => {
     setIsSaved(prev => !prev);
@@ -37,6 +40,14 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
   };
 
   const styles = getStyles(theme, width);
+
+  if (!recipe.calories) { recipe.calories = 0; }
+
+  if(!recipe.image) { recipe.image = 'https://i.imgur.com/Wf18se2.png'; }
+
+  if (recipe.price === 0) {
+    recipe.price = 0.01;
+  }
 
   return (
     <View style={styles.container}>
@@ -71,11 +82,11 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
             <View style={styles.infoContainer}>
               <View style={styles.infoBlock}>
                 <CalorieIcon />
-                <Text style={{ color: '#F3F3F3' }}>{`${recipe.calories} kcal`}</Text>
+                <Text style={{ color: '#F3F3F3' }}>{`${recipe.calories ?? "null"} kcal`}</Text>
               </View>
               <View style={styles.infoBlock}>
                 <TimeIcon />
-                <Text style={{ color: '#F3F3F3' }}>{`${recipe.time} min`}</Text>
+                <Text style={{ color: '#F3F3F3' }}>{`${recipe.time ?? "null"} min`}</Text>
               </View>
               {recipe.price && recipe.servings && (
                 <View style={styles.infoBlock}>

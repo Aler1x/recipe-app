@@ -15,7 +15,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import BackgroundCircle from '../assets/Icons/backgroundCircle';
 import { GroceryItem, useGroceryContext } from '../store/groceryItemsContext';
 
-
 const GroceryList = () => {
   const { theme } = useTheme();
   const styles = getStyles(theme);

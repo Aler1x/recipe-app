@@ -111,9 +111,11 @@ const Profile = () => {
           >
             <Pressable style={{ flex: 1, backgroundColor: theme.backdrop }} onPress={() => setIsOpen(false)}>
               <View style={styles.modalContent}>
-                <Text style={{ fontSize: 18 }}>Contact developers</Text>
+                <Text style={{ fontSize: 18 }}>Contact developer</Text>
                 <View style={{ gap: 3 }}>
-                  {['me@alerix.dev', 'me@amy.dev', 'me@marcin.dev'].map((email) => (
+                  {[
+                    'me@alerix.dev', 
+                  ].map((email) => (
                     <Text key={email} style={styles.userText}>{email}</Text>
                   ))}
                 </View>
