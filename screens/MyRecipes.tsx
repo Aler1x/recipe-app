@@ -22,7 +22,7 @@ import { Theme } from '../styles/theme';
 import { useFavesContext } from '../store/favesContext';
 
 /**
- * TODO: for now it only for my recipes, 
+ * TODO: for now it only for my recipes,
  * but in future it can be a category screen
  * category with images will redirect here
  */
@@ -45,20 +45,33 @@ const MyRecipes = () => {
   if (error) {
     return (
       <View style={[styles.centered, styles.background]}>
-        <View style={[styles.topContainer, {
-          width: Dimensions.get('window').width,
-        }]}>
-          <Pressable onPress={() => navigation.goBack()} style={styles.topButton}>
+        <View
+          style={[
+            styles.topContainer,
+            {
+              width: Dimensions.get('window').width,
+            },
+          ]}
+        >
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={styles.topButton}
+          >
             <BackIcon color={theme.text} />
           </Pressable>
           <Text style={styles.listName}>Your recipes 🥗</Text>
-          <Pressable onPress={() => navigation.navigate('Main', {
-            screen: 'AddRecipe'
-          })} style={styles.topButton}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('Main', {
+                screen: 'AddRecipe',
+              })
+            }
+            style={styles.topButton}
+          >
             <AddIcon color={theme.text} />
           </Pressable>
         </View>
-        <View style={[styles.centered, {justifyContent: 'center'}]}>
+        <View style={[styles.centered, { justifyContent: 'center' }]}>
           <Text>Error: {error.message}</Text>
         </View>
         <BackgroundCircle color={theme.bgCircle} style={styles.circle} />
@@ -94,13 +107,21 @@ const MyRecipes = () => {
         onEndReachedThreshold={1}
         ListHeaderComponent={
           <View style={styles.topContainer}>
-            <Pressable onPress={() => navigation.goBack()} style={styles.topButton}>
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={styles.topButton}
+            >
               <BackIcon color={theme.text} />
             </Pressable>
             <Text style={styles.listName}>Your recipes 🥗</Text>
-            <Pressable onPress={() => navigation.navigate('Main', {
-              screen: 'AddRecipe'
-            })} style={styles.topButton}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('Main', {
+                  screen: 'AddRecipe',
+                })
+              }
+              style={styles.topButton}
+            >
               <AddIcon color={theme.text} />
             </Pressable>
           </View>
@@ -108,9 +129,9 @@ const MyRecipes = () => {
         style={styles.recipesContainer}
         ListFooterComponent={
           <>
-            {recipes &&
-              <ActivityIndicator size="large" color={theme.text} />
-            }
+          {!recipes &&
+            <ActivityIndicator size="large" color={theme.text} />
+          }
           </>
         }
         refreshControl={
@@ -125,43 +146,44 @@ const MyRecipes = () => {
 
 export default MyRecipes;
 
-const geStyles = (theme: Theme) => StyleSheet.create({
-  background: {
-    backgroundColor: theme.background,
-    height: '100%',
-  },
-  recipesContainer: {
-    zIndex: 1,
-  },
-  listName: {
-    color: theme.text,
-    fontFamily: 'TurbotaBold',
-    fontSize: 18,
-    alignSelf: 'center',
-  },
-  topContainer: {
-    flexDirection: 'row',
-    paddingTop: Dimensions.get('window').width * 0.02,
-    paddingHorizontal: 26,
-    paddingBottom: 16,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  topButton: {
-    width: Dimensions.get('window').width * 0.11,
-    height: Dimensions.get('window').width * 0.11,
-    borderRadius: 12,
-    backgroundColor: theme.bgCircle,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  centered: {
-    alignItems: 'center',
-    flex: 1,
-    paddingBottom: Dimensions.get('window').height * 0.1, // for better spinner visibility (nav bar hides it otherwise)
-  },
-  circle: {
-    top: '35%',
-    left: 0,
-  },
-});
+const geStyles = (theme: Theme) =>
+  StyleSheet.create({
+    background: {
+      backgroundColor: theme.background,
+      height: '100%',
+    },
+    recipesContainer: {
+      zIndex: 1,
+    },
+    listName: {
+      color: theme.text,
+      fontFamily: 'TurbotaBold',
+      fontSize: 18,
+      alignSelf: 'center',
+    },
+    topContainer: {
+      flexDirection: 'row',
+      paddingTop: Dimensions.get('window').width * 0.02,
+      paddingHorizontal: 26,
+      paddingBottom: 16,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    topButton: {
+      width: Dimensions.get('window').width * 0.12,
+      aspectRatio: 1,
+      borderRadius: 12,
+      backgroundColor: theme.cardBackground,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    centered: {
+      alignItems: 'center',
+      flex: 1,
+      paddingBottom: Dimensions.get('window').height * 0.1, // for better spinner visibility (nav bar hides it otherwise)
+    },
+    circle: {
+      top: '35%',
+      left: 0,
+    },
+  });

@@ -26,7 +26,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     getStoreData('isDark').then((value) => {
-      console.log('value', value);
+      console.log('default', value);
       const isDark = colorScheme === 'dark';
       if (value === 'dark' || isDark) {
         setIsDark(true);
@@ -40,10 +40,9 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
 
   const toggleTheme = useCallback(() => {
-    storeData('isDark', isDark ? 'light' : 'dark').then(() => {
+    storeData('isDark', isDark ? 'light' : 'dark')
+    .then(() => {
       getStoreData('isDark').then((value) => {
-        console.log('value', value);
-        console.log('isDark', isDark);
         if (value === 'dark') {
           setIsDark(true);
           setTheme(darkTheme);
@@ -53,7 +52,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
         }
       });
     });
-  }, []);
+  }, [isDark]);
 
   return (
     <ThemeContext.Provider value={{ isDark, theme, toggleTheme }}>

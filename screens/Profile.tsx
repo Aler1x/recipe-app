@@ -37,8 +37,7 @@ const Profile = () => {
 
   return (
     <View style={{ backgroundColor: theme.background, flex: 1 }}>
-      <BackgroundCircle style={{ top: -650, right: -300 }} />
-      <BackgroundCircle style={{ top: Dimensions.get('window').height * 0.3, left: 0 }} />
+      <BackgroundCircle style={{ top: Dimensions.get('window').height * 0.4, left: 0 }} />
       <ScrollView style={{ paddingHorizontal: 15 }}>
         <View style={styles.header}>
           <Text style={styles.title}>Your Profile 😊</Text>
@@ -91,9 +90,9 @@ const Profile = () => {
               <StatisticIcon style={styles.statisticIcon} color={theme.foreground} />
               <Text style={styles.statisticText}>Statistics</Text>
             </View>
-            <View style={styles.statisticLine} />
+            {/* <View style={styles.statisticLine} />
             <Text style={styles.statisticText}>You waste 69 hours on fucking</Text>
-            <Text style={styles.statisticText}>Most looked recipe Shakshuka</Text>
+            <Text style={styles.statisticText}>Most looked recipe Shakshuka</Text> */}
           </Pressable>
 
           <ProfileButton

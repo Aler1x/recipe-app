@@ -47,13 +47,9 @@ const Saved = () => {
     navigation.navigate('Recipe', { id });
   };
 
-  if(data && faves) {
+  if (data) {
     data.recipes.forEach(recipe => {
-      if(faves.includes(recipe.id)) {
-        recipe.isSaved = true;
-      } else {
-        recipe.isSaved = false;
-      }
+      recipe.isSaved = true;
     });
   }
 
