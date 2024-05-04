@@ -8,9 +8,10 @@ type ContributionGraphProps = {
   endDate: string;
   color: string;
   maxHeight?: number;
+  squareSize?: number;
 };
 
-const ContributionGraph = ({ data, startDate, endDate, color, maxHeight }: ContributionGraphProps) => {
+const ContributionGraph = ({ data, startDate, endDate, color, maxHeight, squareSize }: ContributionGraphProps) => {
   const gridData = prepareGridData(data, startDate, endDate);
 
   const monthArray = getMonthNames(new Date(startDate), new Date(endDate));
@@ -19,11 +20,11 @@ const ContributionGraph = ({ data, startDate, endDate, color, maxHeight }: Contr
     container: {
       flexDirection: 'column', // Adjust based on your layout; you might need wrapping
       flexWrap: 'wrap',
-      maxHeight: maxHeight || 110 // or any size you want
+      maxHeight: maxHeight || 109 // or any size you want
     },
     daySquare: {
-      width: 15, // or any size you want
-      height: 15, // or any size you want
+      width: squareSize || 16,
+      aspectRatio: 1,
       margin: 1.1
     },
     title: {

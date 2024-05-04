@@ -76,7 +76,7 @@ export const FavesProvider: React.FC<{ children: React.ReactNode }> = ({
         });
       });
     }
-  }, [faves, setFavesRecipes, setFaves]);
+  }, [faves]);
 
   return (
     <FavesContext.Provider value={{ faves, addFave, removeFave, favesRecipes }}>
