@@ -50,12 +50,12 @@ export const FavesProvider: React.FC<{ children: React.ReactNode }> = ({
   const addFave = useCallback((id: number) => {
     console.log('addFave', id);
     setFaves(prev => [...prev, id]);
-  }, []);
+  }, [faves]);
 
   const removeFave = useCallback((id: number) => {
     console.log('removeFave', id);
     setFaves(prev => prev.filter(faveId => faveId !== id));
-  }, []);
+  }, [faves]);
 
   useEffect(() => {
     if (faves.length > 0) {

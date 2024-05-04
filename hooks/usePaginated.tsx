@@ -19,34 +19,38 @@ function usePaginated<T extends any[]>(
   const [error, setError] = useState<Error | null>(null);
   const [page, setPage] = useState<number>(0);
   const [categories, setCategories] = useState<string[]>([]);
+  const [isRefetch, setIsRefetch] = useState<boolean>(false);
 
   const fetchMore = () => {
     setPage(prevPage => prevPage + 1);
   };
 
   const refetch = () => {
-    setData(null);
     setPage(0);
+    setIsRefetch(prev => !prev);
   };
 
-  const addCategory = useCallback((add: string) => {
-    if (categories.includes(add)) return;
-    setCategories([...categories, add]);
-  }, [categories]);
- 
-  const removeCategory = useCallback((remove: string) => {
-    if (!categories.includes(remove)) return;
-    setCategories(categories.filter(item => item !== remove));
-  }, [categories]);
+  const addCategory = useCallback(
+    (add: string) => {
+      if (categories.includes(add)) return;
+      setCategories([...categories, add]);
+    },
+    [categories],
+  );
+
+  const removeCategory = useCallback(
+    (remove: string) => {
+      if (!categories.includes(remove)) return;
+      setCategories(categories.filter(item => item !== remove));
+    },
+    [categories],
+  );
 
   useEffect(() => {
     setLoading(true);
-    let url = '';
-    if (categories.length === 0) {
-      url = `${API_URL}${endpoint}?page=${page}&size=${size}`;
-    } else {
-      url = `${API_URL}${endpoint}/category?page=${page}&size=${size}&categories=${categories.join(',')}`;
-    }
+    const url =
+      `${API_URL}${endpoint}?page=${page}&size=${size}` +
+      (categories.length === 0 ? '' : `&categories=${categories.join(',')}`);
     console.log(url);
     getStoreData('jwtToken').then(token => {
       fetch(url, {
@@ -63,6 +67,12 @@ function usePaginated<T extends any[]>(
           return response.json();
         })
         .then(responseData => {
+          if(isRefetch) {
+            setData(responseData.content);
+            setIsRefetch(false);
+            setError(null);
+            return;
+          }
           setData(prev => {
             if (prev) {
               const currentIds = prev.map(item => item.id);
@@ -83,9 +93,17 @@ function usePaginated<T extends any[]>(
           setLoading(false);
         });
     });
-  }, [endpoint, page, size, categories]);
+  }, [endpoint, page, isRefetch]);
 
-  return { data, loading, error, fetchMore, refetch, addCategory, removeCategory};
+  return {
+    data,
+    loading,
+    error,
+    fetchMore,
+    refetch,
+    addCategory,
+    removeCategory,
+  };
 }
 
 export default usePaginated;
